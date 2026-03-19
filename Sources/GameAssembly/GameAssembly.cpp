@@ -5,10 +5,14 @@
 #include "ParticleSystem.hpp"
 #include "PhysicsTestComponent.hpp"
 #include "PlayerComponent.hpp"
+#include "EnnemyComponent.hpp"
+#include "EnnemySpawner.hpp"
 
 COMPONENT_MODULE_BEGIN()
     REGISTER_COMPONENT(FlyCamComponent, "Fly Cam Component")
     REGISTER_COMPONENT(ParticleSystemComponent, "Particle System")
     REGISTER_COMPONENT(PhysicsTestComponent, "Physics Test")
     REGISTER_COMPONENT(PlayerComponent, "Player Component")
+    REGISTER_COMPONENT(EnnemyComponent, "Ennemy Component")
+    REGISTER_COMPONENT(EnnemySpawner, "Ennemy Spawner")
 COMPONENT_MODULE_END()
