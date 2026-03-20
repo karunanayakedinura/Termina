@@ -4,7 +4,7 @@
 
 void EnnemyComponent::Awake()
 {
-    // Initialisation tres tot (avant Start)
+    // Initialisation
 }
 
 void EnnemyComponent::Start()
@@ -45,6 +45,9 @@ void EnnemyComponent::Update(float deltaTime)
     // --- DEPLACEMENT ---
     pos += dir * m_Speed * deltaTime;
     m_Transform->SetPosition(pos);
+
+    // --- COMPORTEMENT SPECIFIQUE ---
+    Attack(deltaTime); 
 }
 
 void EnnemyComponent::OnCollisionEnter(Termina::Actor* other)
