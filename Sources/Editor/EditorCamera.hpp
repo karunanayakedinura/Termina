@@ -35,7 +35,7 @@ private:
     float m_Yaw           = -90.0f;
     float m_Pitch         =  0.0f;
     float m_FOV           =  75.0f;
-    float m_MoveSpeed     =   5.0f;
+    float m_MoveSpeed     =   10.0f;
     float m_FastMultiplier=   4.0f;
     float m_Sensitivity   =   0.12f;
     float m_Acceleration  =  20.0f;
