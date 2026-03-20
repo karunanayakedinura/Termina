@@ -30,14 +30,14 @@ public:
     float SetAtkSpeedD(float newVal);*/
 
 private:
-    float m_health = 100;
+    float m_maxHealth = 100.f;
+    float m_health = 100.f;
     float m_speed;
     float m_shield;
     float m_range;
-    float m_atkC = 30;
-    float m_atkD = 15;
-    /*float m_atkSpeedC = 1;
-    float m_atkSpeedD = 1;*/
+    float m_atkC = 30.f;
+    float m_atkD = 15.f;
+    // float m_atkSpeedC = 1;
 
     int m_weapon = 0;
     bool isOn = false;

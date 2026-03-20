@@ -13,9 +13,9 @@ void PlayerComponent::Stop()
 }
 
 void PlayerComponent::Update(float deltaTime){
-    Move(m_speed, deltaTime);
+    Move(1.0f, deltaTime);
 
-    if (Input::IsMouseButtonPressed(Termina::MouseButton::Left)) {
+    /*if (Input::IsMouseButtonPressed(Termina::MouseButton::Left)) {
         switch (m_weapon) {
         case 0:
             AtkCorps(*m_enemy);
@@ -25,29 +25,33 @@ void PlayerComponent::Update(float deltaTime){
             AtkDist(*m_enemy);
             break;
         }
+    }*/
+
+    if (m_canRespawn && m_health <= 0) {
+        m_health = m_maxHealth;
     }
 }
 
 void PlayerComponent::Move(float speed, float deltaTime) {
 
     glm::vec3 pos = m_Transform->GetPosition();
+    //
 
     if (Input::IsKeyPressed(Termina::Key::Z)) {
+        TN_INFO("pos initial %a", pos);
         pos += glm::vec3(speed, 0, 0) * deltaTime;
-        m_Transform->SetPosition(pos);
+        TN_INFO("pos update %a", pos);
     }
     if (Input::IsKeyPressed(Termina::Key::Q)) {
         pos += glm::vec3(0, -speed, 0) * deltaTime;
-        m_Transform->SetPosition(pos);
     }
     if (Input::IsKeyPressed(Termina::Key::S)) {
         pos += glm::vec3(0, 0, -speed) * deltaTime;
-        m_Transform->SetPosition(pos);
     }
     if (Input::IsKeyPressed(Termina::Key::D)) {
         pos += glm::vec3(0, 0, speed) * deltaTime;
-        m_Transform->SetPosition(pos);
     }
+    m_Transform->SetPosition(pos);
 }
 
 void PlayerComponent::Damage(float damage) {
@@ -61,6 +65,7 @@ void PlayerComponent::AtkDist(EnnemyComponent& other) {
 void PlayerComponent::AtkCorps(EnnemyComponent& other) {
     if(other.GetOwner()->GetComponent<Termina::Transform>().GetPosition().x < m_range){
         m_enemy =  &other;
+        // other.SetHealth(damage);
     }
 }
 
