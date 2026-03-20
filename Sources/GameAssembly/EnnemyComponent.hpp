@@ -18,6 +18,8 @@ public:
     void Serialize(nlohmann::json& out) const override;
     void Deserialize(const nlohmann::json& in) override;
 
+    int GetHealth() const { return m_Health; };
+
 private:
     float m_Speed = 2.0f;
     int   m_Health = 10;

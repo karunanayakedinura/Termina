@@ -9,9 +9,9 @@ void EnnemyComponent::Awake()
 
 void EnnemyComponent::Start()
 {
-    TN_INFO("Enemy spawned with %d HP", m_Health);
+    TN_INFO("Enemy spawned with %d HP", GetHealth());
 
-    // Récupère l'acteur nommé "Player"
+    // Recupere l'acteur nomme "Player"
     m_Player = m_Owner->GetParentWorld()->GetActorByName("Player");
 
     if (!m_Player)
@@ -32,26 +32,26 @@ void EnnemyComponent::Update(float deltaTime)
     // Direction vers le joueur
     glm::vec3 dir = target - pos;
 
-    // On ignore la hauteur (si tu veux un ennemi 3D qui ne regarde pas vers le haut/bas)
+    // On ignore la hauteur
     dir.y = 0.0f;
 
     // Normalisation
     dir = glm::normalize(dir);
-    
+
     // --- ROTATION AUTOMATIQUE ---
-    // Forward = direction vers le joueur
     glm::quat rot = glm::quatLookAt(dir, glm::vec3(0, 1, 0));
     m_Transform->SetRotation(rot);
-    
-    // --- DÉPLACEMENT ---
+
+    // --- DEPLACEMENT ---
     pos += dir * m_Speed * deltaTime;
     m_Transform->SetPosition(pos);
 }
 
-
 void EnnemyComponent::OnCollisionEnter(Termina::Actor* other)
 {
-    TN_INFO("Enemy collided with %s", other->GetName().c_str());
+    TN_INFO("Enemy collided with %s (HP = %d)",
+        other->GetName().c_str(),
+        GetHealth());
 }
 
 void EnnemyComponent::Inspect()
@@ -74,4 +74,3 @@ void EnnemyComponent::Deserialize(const nlohmann::json& in)
     if (in.contains("health")) m_Health = in["health"];
     if (in.contains("damage")) m_Damage = in["damage"];
 }
-

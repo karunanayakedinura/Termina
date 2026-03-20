@@ -32,5 +32,5 @@ void EnnemySpawner::Inspect()
 {
     ImGui::DragFloat("Spawn Delay", &m_SpawnDelay, 0.1f, 0.1f, 60.0f);
     ImGui::Checkbox("Spawn Once", &m_SpawnOnce);
-    m_EnemyPrefab.Inspect("Enemy Prefab");
+    m_EnemyPrefab.Inspect("Prefab");
 }
