@@ -7,9 +7,25 @@ void PlayerComponent::Start()
     // Called once when the scene starts playing.
 }
 
-void PlayerComponent::Update(float deltaTime)
+void PlayerComponent::Stop()
 {
+    m_enemy = nullptr;
+}
+
+void PlayerComponent::Update(float deltaTime){
     Move(m_speed, deltaTime);
+
+    if (Input::IsMouseButtonPressed(Termina::MouseButton::Left)) {
+        switch (m_weapon) {
+        case 0:
+            AtkCorps(*m_enemy);
+            break;
+
+        case 1:
+            AtkDist(*m_enemy);
+            break;
+        }
+    }
 }
 
 void PlayerComponent::Move(float speed, float deltaTime) {
@@ -34,21 +50,23 @@ void PlayerComponent::Move(float speed, float deltaTime) {
     }
 }
 
-void PlayerComponent::Inspect()
-{
-    ImGui::DragFloat("Speed", &m_speed, 1.f, 0.5f, 100.f);
-}
-
 void PlayerComponent::Damage(float damage) {
     m_health -= damage;
 }
 
-void PlayerComponent::AtkDist() {
-    if () {
+void PlayerComponent::AtkDist(EnnemyComponent& other) {
+    // Appel de spawn de projectile(s)
+}
 
+void PlayerComponent::AtkCorps(EnnemyComponent& other) {
+    if(other.GetOwner()->GetComponent<Termina::Transform>().GetPosition().x < m_range){
+        m_enemy =  &other;
     }
 }
 
-void PlayerComponent::AtkCorps() {
 
+void PlayerComponent::Inspect()
+{
+    ImGui::DragFloat("Speed", &m_speed, 1.f, 0.5f, 100.f);
+    ImGui::DragFloat("Range", &m_range, 0.1f, 0.1f, 10.f);
 }

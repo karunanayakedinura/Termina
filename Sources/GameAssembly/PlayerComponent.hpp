@@ -1,6 +1,6 @@
 #pragma once
 #include <Termina/Scripting/API/ScriptingAPI.hpp>
-//#include <GameAssembly/>
+#include <GameAssembly/EnnemyComponent.hpp>
 
 using namespace TerminaScript;
 
@@ -9,14 +9,15 @@ public:
     PlayerComponent() = default;
     PlayerComponent(Termina::Actor* owner) : TerminaScript::ScriptableComponent(owner) {}
 
-    void Start()  override;
+    void Start() override;
+    void Stop() override;
     void Update(float deltaTime) override;
     void Inspect() override;
 
     void Move(float speed, float deltaTime);
     void Damage(float damage);
-    void AtkDist();
-    void AtkCorps();
+    void AtkDist(EnnemyComponent& other);
+    void AtkCorps(EnnemyComponent& other);
 
     // void UpdateCurrentWeapon();
     // bool CanRespawn();
@@ -32,12 +33,15 @@ private:
     float m_health = 100;
     float m_speed;
     float m_shield;
+    float m_range;
     float m_atkC = 30;
     float m_atkD = 15;
-    float m_atkSpeedC = 1;
-    float m_atkSpeedD = 1;
+    /*float m_atkSpeedC = 1;
+    float m_atkSpeedD = 1;*/
 
     int m_weapon = 0;
-    bool m_isArmed = false;
+    bool isOn = false;
     bool m_canRespawn = false;
+
+    EnnemyComponent* m_enemy = nullptr;
 };
