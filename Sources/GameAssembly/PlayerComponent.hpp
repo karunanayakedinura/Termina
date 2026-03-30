@@ -13,6 +13,8 @@ public:
     void Stop() override;
     void Update(float deltaTime) override;
     void Inspect() override;
+    void Serialize(nlohmann::json& out) const override;
+    void Deserialize(const nlohmann::json& in) override;
 
     void Move(float speed, float deltaTime);
     void Damage(float damage);
@@ -30,18 +32,18 @@ public:
     float SetAtkSpeedD(float newVal);*/
 
 private:
-    float m_maxHealth = 100.f;
-    float m_health = 100.f;
-    float m_speed;
-    float m_shield;
-    float m_range;
-    float m_atkC = 30.f;
-    float m_atkD = 15.f;
-    // float m_atkSpeedC = 1;
+    float m_MaxHealth = 100.f;
+    float m_Health = 100.f;
+    float m_Speed = 1.f;
+    float m_Shield;
+    float m_Range;
+    float m_AtkC = 30.f;
+    float m_AtkD = 15.f;
+    float m_Damage = 10.f;
 
-    int m_weapon = 0;
-    bool isOn = false;
-    bool m_canRespawn = false;
+    int m_Weapon = 0;
+    bool m_IsOn = false;
+    bool m_CanRespawn = false;
 
     EnnemyComponent* m_enemy = nullptr;
 };

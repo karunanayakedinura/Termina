@@ -9,12 +9,13 @@ public:
     WeaponComponent() = default;
     WeaponComponent(Termina::Actor* owner) : TerminaScript::ScriptableComponent(owner) {}
 
-    /*void Start() override;
+    void Start() override;
     void Update(float deltaTime) override;
 
-    void Spawner();*/
+    void MunitionSpawner();
 
 private:
-    int m_ammo = 20;
-    float m_atkSpeedD = 1;
+    int m_ID;
+    int m_Ammo;
+    float m_AtkSpeed;
 };

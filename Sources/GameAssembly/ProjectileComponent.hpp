@@ -6,9 +6,10 @@ public:
     ProjectileComponent() = default;
     ProjectileComponent(Termina::Actor* owner) : TerminaScript::ScriptableComponent(owner) {}
 
-    /*void Start() override;
-    void Update(float deltaTime) override;*/
+    void Start() override;
+    void Stop() override;
+    void Update(float deltaTime) override;
 
 private:
-    float m_speed;
+    float m_Speed;
 };
