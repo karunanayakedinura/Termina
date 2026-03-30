@@ -17,10 +17,6 @@ public:
 
     float GetAttackRangeSq() const;
 
-private:
-    Termina::Actor* m_PlayerRef = nullptr;
-    Termina::Actor* m_IntroParticles = nullptr;
-
     enum class Phase
     {
         Intro,
@@ -36,6 +32,18 @@ private:
         Move,
         Attack
     };
+
+    // -------- Gameplay Functions --------
+    void EnterPhase(Phase newPhase);
+    void DoMeleeAttack();
+    void DoRangedAttack();
+    void Die();
+    void TakeDamage(float amount);
+
+private:
+    // -------- References --------
+    Termina::Actor* m_PlayerRef = nullptr;
+    Termina::Actor* m_IntroParticles = nullptr;
 
     // -------- Stats --------
     float m_Health = 100.0f;
@@ -67,4 +75,9 @@ private:
 
     bool m_InTransition = false;
     float m_PhaseTransitionTimer = 0.0f;
+
+    // -------- Death --------
+    bool m_IsDead = false;
+    float m_DeathTimer = 0.0f;
+    float m_DeathDuration = 2.0f;
 };

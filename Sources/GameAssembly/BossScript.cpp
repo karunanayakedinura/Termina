@@ -8,6 +8,8 @@ void BossScript::Start()
     m_PlayerRef = m_Owner->GetParentWorld()->GetActorByName("PlayerTest");
     m_IntroParticles = m_Owner->GetParentWorld()->GetActorByName("ParticuleBossIntro");
 
+    m_AttackSwitchTimer = m_AttackSwitchCooldown;
+
     if (!m_PlayerRef)
         TN_WARN("BossScript: Player not found in scene!");
 
@@ -19,6 +21,50 @@ void BossScript::Update(float deltaTime)
 {
     if (!m_PlayerRef)
         return;
+
+    // -------- DEATH CHECK --------
+    if (!m_IsDead && m_Health <= 0.0f)
+    {
+        Die();
+    }
+
+    if (m_IsDead)
+    {
+        m_DeathTimer -= deltaTime;
+
+        if (m_DeathTimer > 0.0f) {
+            glm::vec3 pos = m_Transform->GetPosition();
+            pos.y += deltaTime * 0.5f;
+            m_Transform->SetPosition(pos);
+
+            if (m_IntroParticles)
+            {
+                glm::vec3 bossPos = m_Transform->GetPosition();
+                glm::vec3 particlePos = bossPos;
+
+                auto& psXform = m_IntroParticles->GetComponent<Termina::Transform>();
+                psXform.SetPosition(particlePos);
+
+                auto& ps = m_IntroParticles->GetComponent<ParticleSystemComponent>();
+                ps.m_EmitRate = 5.0f;
+            }
+        }
+
+        if (m_DeathTimer <= 0.0f)
+        {
+            glm::vec3 pos = m_Transform->GetPosition();
+            pos.y = -100.0f;
+            m_Transform->SetPosition(pos);
+
+            if (m_IntroParticles)
+            {
+                auto& ps = m_IntroParticles->GetComponent<ParticleSystemComponent>();
+                ps.m_EmitRate = 0.0f;
+            }
+        }
+
+        return;
+    }
 
     // -------- INTRO --------
     if (m_CurrentPhase == Phase::Intro)
@@ -68,7 +114,7 @@ void BossScript::Update(float deltaTime)
             if (m_IntroTimer >= m_IntroWaitDuration)
             {
                 m_IntroWaitDone = true;
-                m_CurrentPhase = Phase::Phase1;
+                EnterPhase(Phase::Phase1);
 
                 if (m_IntroParticles)
                 {
@@ -80,8 +126,9 @@ void BossScript::Update(float deltaTime)
         }
     }
 
-    // --- TIMERS ---
+    // -------- TIMERS --------
     m_AttackTimer -= deltaTime;
+
     if (m_InTransition)
     {
         m_PhaseTransitionTimer -= deltaTime;
@@ -90,136 +137,152 @@ void BossScript::Update(float deltaTime)
         return;
     }
 
-    // --- PHASE LOGIC ---
+    // -------- PHASE LOGIC --------
     float hpPercent = m_Health / m_MaxHealth;
+
     switch (m_CurrentPhase)
     {
     case Phase::Phase1:
         if (hpPercent <= 0.5f)
-            m_CurrentPhase = Phase::Phase2;
+            EnterPhase(Phase::Phase2);
         break;
+
     case Phase::Phase2:
         if (hpPercent <= 0.1f)
         {
-            m_CurrentPhase = Phase::Phase3;
+            EnterPhase(Phase::Phase3);
             m_MaxHealth = 125.0f;
-            m_Health = m_MaxHealth;
-            m_InTransition = true;
-            m_PhaseTransitionTimer = 2.0f;
+            m_Health = 125.0f;
             m_UseMelee = false;
         }
         break;
+
     case Phase::Phase3:
         if (hpPercent <= 0.5f)
-            m_CurrentPhase = Phase::Phase4;
+            EnterPhase(Phase::Phase4);
         break;
-    case Phase::Phase4:
-        break;
+
     default:
         break;
     }
 
-    // --- POSITION AND DIRECTION ---
+    // -------- POSITION --------
     glm::vec3 pos = m_Transform->GetPosition();
     glm::vec3 target = m_PlayerRef->GetComponent<Termina::Transform>().GetPosition();
     glm::vec3 dir = target - pos;
     dir.y = 0.0f;
-    float distSq = glm::dot(dir, dir);
 
-    // --- STATE MACHINE ---
+    float distSq = glm::dot(dir, dir);
+    float dist = glm::length(dir);
+
+    // -------- ATTACK SWITCH --------
+    if (m_CurrentPhase == Phase::Phase2 || m_CurrentPhase == Phase::Phase4)
+    {
+        float speedMultiplier = (m_CurrentPhase == Phase::Phase4) ? 1.8f : 1.0f;
+
+        m_AttackSwitchTimer -= deltaTime * speedMultiplier;
+        if (m_AttackSwitchTimer <= 0.0f)
+        {
+            m_UseMelee = !m_UseMelee;
+            m_AttackSwitchTimer = (m_CurrentPhase == Phase::Phase4) ? 1.5f : 2.0f;
+        }
+    }
+
+    // -------- STATE MACHINE --------
     float attackRangeSq = GetAttackRangeSq();
+
     switch (m_CurrentAction)
     {
     case State::Idle:
         m_CurrentAction = (distSq <= attackRangeSq) ? State::Attack : State::Move;
         break;
+
     case State::Move:
-        if (distSq <= attackRangeSq) m_CurrentAction = State::Attack;
+        if (distSq <= attackRangeSq)
+            m_CurrentAction = State::Attack;
         break;
+
     case State::Attack:
-        if (distSq > attackRangeSq) m_CurrentAction = State::Move;
+        if (distSq > attackRangeSq)
+            m_CurrentAction = State::Move;
         break;
     }
 
-    // -------- BEHAVIOR: MOVE FORWARD/BACKWARD --------
-    float speedMultiplier = (m_CurrentPhase == Phase::Phase4) ? 1.8f : 1.0f;
-
-    // Determine ideal distance based on phase and attack type
+    // -------- MOVEMENT --------
     float idealDistance = 0.0f;
+
     switch (m_CurrentPhase)
     {
-    case Phase::Phase1: // full melee
+    case Phase::Phase1:
         idealDistance = m_MeleeAttackRange * 0.8f;
         break;
-    case Phase::Phase2: // alternate melee/ranged
+
+    case Phase::Phase2:
+    case Phase::Phase4:
         idealDistance = m_UseMelee ? m_MeleeAttackRange * 0.8f : m_RangedAttackRange * 0.7f;
         break;
-    case Phase::Phase3: // full ranged
+
+    case Phase::Phase3:
         idealDistance = m_RangedAttackRange * 0.7f;
         break;
-    case Phase::Phase4: // hardcore
-        idealDistance = m_UseMelee ? m_MeleeAttackRange * 0.8f : m_RangedAttackRange * 0.7f;
-        break;
+
     default:
-        idealDistance = m_MeleeAttackRange * 0.8f;
         break;
     }
 
-    float dist = glm::length(dir);
-
-    if (dist > 0.0001f)
+    if (dist > 0.001f)
     {
         glm::vec3 moveDir = glm::normalize(dir);
 
-        // --- MOVE FORWARD / BACKWARD ---
-        if (dist > idealDistance + 0.1f) // too far -> move forward
-        {
+        if (dist > idealDistance + 0.1f)
             pos += moveDir * m_Speed * deltaTime;
-            m_CurrentAction = State::Move;
-        }
-        else if (dist < idealDistance - 0.1f) // too close -> move backward
-        {
+        else if (dist < idealDistance - 0.1f)
             pos -= moveDir * m_Speed * deltaTime;
-            m_CurrentAction = State::Move;
-        }
-        else
-        {
-            // correct distance -> attack
-            m_CurrentAction = State::Attack;
-        }
 
         m_Transform->SetPosition(pos);
     }
 
-    // --- ATTACK ---
+    // -------- ATTACK --------
     if (m_CurrentAction == State::Attack && m_AttackTimer <= 0.0f)
     {
         switch (m_CurrentPhase)
         {
-        case Phase::Phase1: // FULL MELEE
+        case Phase::Phase1:
+            DoMeleeAttack();
             m_AttackTimer = 2.0f;
             break;
-        case Phase::Phase2: // ALTERNATE
-            m_AttackSwitchTimer -= deltaTime;
-            if (m_AttackSwitchTimer <= 0.0f)
+
+        case Phase::Phase2:
+            if (m_UseMelee)
             {
-                m_UseMelee = !m_UseMelee;
-                m_AttackSwitchTimer = 2.0f;
+                DoMeleeAttack();
+                m_AttackTimer = 2.0f;
             }
-            m_AttackTimer = m_UseMelee ? 2.0f : 1.5f;
+            else
+            {
+                DoRangedAttack();
+                m_AttackTimer = 1.5f;
+            }
             break;
-        case Phase::Phase3: // FULL RANGE
+
+        case Phase::Phase3:
+            DoRangedAttack();
             m_AttackTimer = 1.2f;
             break;
-        case Phase::Phase4: // HARDCORE
-            m_AttackSwitchTimer -= deltaTime * speedMultiplier;
-            if (m_AttackSwitchTimer <= 0.0f)
+
+        case Phase::Phase4:
+            if (m_UseMelee)
             {
-                m_UseMelee = !m_UseMelee;
-                m_AttackSwitchTimer = 1.5f;
+                DoMeleeAttack();
+                m_AttackTimer = 1.0f;
             }
-            m_AttackTimer = m_UseMelee ? 1.0f : 0.8f;
+            else
+            {
+                DoRangedAttack();
+                m_AttackTimer = 0.8f;
+            }
             break;
+
         default:
             break;
         }
@@ -281,4 +344,58 @@ float BossScript::GetAttackRangeSq() const
         : m_RangedAttackRange * m_RangedAttackRange;
     default: return 0.0f;
     }
+}
+
+void BossScript::EnterPhase(Phase newPhase)
+{
+    m_CurrentPhase = newPhase;
+    m_InTransition = true;
+    m_PhaseTransitionTimer = 2.0f;
+
+    m_AttackTimer = 0.0f;
+    m_AttackSwitchTimer = m_AttackSwitchCooldown;
+    m_CurrentAction = State::Idle;
+}
+
+void BossScript::DoMeleeAttack()
+{
+    TN_INFO("Boss: Melee Attack");
+
+    // TODO:
+    // - détecter si le joueur est dans la range
+    // - appliquer dégâts
+    // - jouer animation
+}
+
+void BossScript::DoRangedAttack()
+{
+    TN_INFO("Boss: Ranged Attack");
+
+    // TODO:
+    // - spawn projectile
+    // - viser le joueur
+}
+
+void BossScript::Die()
+{
+    if (m_IsDead)
+        return;
+
+    m_IsDead = true;
+    m_DeathTimer = m_DeathDuration;
+
+    TN_INFO("Boss: Dead");
+
+    // TODO:
+    // - déclencher event victoire
+}
+
+void BossScript::TakeDamage(float amount)
+{
+    if (m_IsDead)
+        return;
+
+    m_Health -= amount;
+
+    TN_INFO("Boss took damage: %.1f (HP: %.1f)", amount, m_Health);
 }
