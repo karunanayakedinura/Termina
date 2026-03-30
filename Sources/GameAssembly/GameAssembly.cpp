@@ -8,6 +8,7 @@
 #include "EnnemySpawner.hpp"
 #include "MeleeEnnemyComponent.hpp"
 #include "RangedEnnemyComponent.hpp"
+#include "MainMenuComponent.hpp"
 
 COMPONENT_MODULE_BEGIN()
     REGISTER_COMPONENT(FlyCamComponent, "Fly Cam Component")
@@ -17,4 +18,5 @@ COMPONENT_MODULE_BEGIN()
     REGISTER_COMPONENT(EnnemySpawner, "Ennemy Spawner")
     REGISTER_COMPONENT(MeleeEnnemyComponent, "Melee Ennemy Component")
     REGISTER_COMPONENT(RangedEnnemyComponent, "Ranged Ennemy Component")
+    REGISTER_COMPONENT(MainMenuComponent, "Main Menu Component")
 COMPONENT_MODULE_END()
