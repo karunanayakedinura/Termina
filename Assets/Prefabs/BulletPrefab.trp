@@ -1,0 +1,50 @@
+{
+    "actors": [
+        {
+            "active": true,
+            "components": [
+                {
+                    "active": true,
+                    "data": {
+                        "position": [
+                            0.0,
+                            5.490203857421875,
+                            -0.026522308588027954
+                        ],
+                        "rotation": [
+                            1.0,
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "scale": [
+                            5.690000057220459,
+                            5.690000057220459,
+                            5.690000057220459
+                        ]
+                    },
+                    "type": "Transform"
+                },
+                {
+                    "active": true,
+                    "data": {
+                        "material_overrides": {
+                            "0": "Assets\\Models\\Bullet\\Bullet_mat0.mat"
+                        },
+                        "model": "Assets\\Models\\Bullet\\Bullet.gltf"
+                    },
+                    "type": "Mesh Component"
+                },
+                {
+                    "active": true,
+                    "data": {},
+                    "type": "Projectile Component"
+                }
+            ],
+            "id": "1119187812475949983",
+            "name": "BulletPrefab",
+            "parentId": null
+        }
+    ],
+    "version": 1
+}

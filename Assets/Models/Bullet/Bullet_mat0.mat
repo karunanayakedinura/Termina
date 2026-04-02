@@ -1,0 +1,16 @@
+{
+  "albedo_texture": "Assets\\Models\\Bullet\\Material_BaseColor.jpeg",
+  "alpha_test": false,
+  "color": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "emissive_texture": "",
+  "metallic_factor": 1.0,
+  "normal_texture": "Assets\\Models\\Bullet\\Material_Normal.png",
+  "orm_texture": "Assets\\Models\\Bullet\\Material_ORM.jpeg",
+  "override_metallic": false,
+  "override_roughness": false,
+  "roughness_factor": 0.16200000047683716
+}

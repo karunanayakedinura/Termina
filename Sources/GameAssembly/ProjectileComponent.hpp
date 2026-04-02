@@ -9,7 +9,8 @@ public:
     void Start() override;
     void Stop() override;
     void Update(float deltaTime) override;
+    void Inspect() override;
 
 private:
-    float m_Speed;
+    float m_Speed = 1.f;
 };

@@ -1,6 +1,7 @@
 #pragma once
 #include <Termina/Scripting/API/ScriptingAPI.hpp>
 #include <GameAssembly/EnnemyComponent.hpp>
+#include "WeaponComponent.hpp"
 
 using namespace TerminaScript;
 
@@ -17,16 +18,15 @@ public:
     void Deserialize(const nlohmann::json& in) override;
 
     void Move(float speed, float deltaTime);
-    void Damage(float damage);
-    void AtkDist(EnnemyComponent& other);
+    void AtkDist();
     void AtkCorps(EnnemyComponent& other);
 
     // void UpdateCurrentWeapon();
     // bool CanRespawn();
 
     //////// GETTER & SETTER //////// 
-    /*float SetHealth(float newVal);
-    float SetSpeed(float newVal);
+    float SetHealth(float newVal) { return m_Health -= newVal; };
+    /*float SetSpeed(float newVal);
     float SetShield(float newVal);
     float SetAtkSpeedC(float newVal);
     float SetAtkSpeedD(float newVal);*/
@@ -41,9 +41,10 @@ private:
     float m_AtkD = 15.f;
     float m_Damage = 10.f;
 
-    int m_Weapon = 0;
+    int m_WeaponID = 0;
     bool m_IsOn = false;
     bool m_CanRespawn = false;
 
-    EnnemyComponent* m_enemy = nullptr;
+    WeaponComponent* m_Weapon = nullptr;
+    EnnemyComponent* m_Enemy = nullptr;
 };
