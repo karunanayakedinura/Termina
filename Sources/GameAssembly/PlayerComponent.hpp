@@ -41,8 +41,8 @@ private:
     float m_AtkD = 15.f;
     float m_Damage = 10.f;
 
-    int m_WeaponID = 0;
-    bool m_IsOn = false;
+    int m_WeaponID = 0; // Si + armes
+    bool m_WeaponInUse = false;
     bool m_CanRespawn = false;
 
     WeaponComponent* m_Weapon = nullptr;

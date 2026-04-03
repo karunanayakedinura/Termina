@@ -16,7 +16,7 @@ void PlayerComponent::Update(float deltaTime){
     Move(m_Speed, deltaTime);
 
     /*if (Input::IsMouseButtonPressed(Termina::MouseButton::Left)) {
-        switch (m_weaponID) {
+        switch (m_WeaponInUse) {
         case 0:
             AtkCorps(*m_enemy);
             break;

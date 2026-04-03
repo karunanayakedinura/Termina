@@ -11,11 +11,16 @@ public:
 
     void Start() override;
     void Update(float deltaTime) override;
+    void Inspect() override;
+    void Serialize(nlohmann::json& out) const override;
+    void Deserialize(const nlohmann::json& in) override;
 
     void MunitionSpawner();
 
 private:
-    int m_ID;
-    int m_Ammo;
-    float m_AtkSpeed;
+    int m_ID = 1; // si + armes
+    int m_Ammo = 5;
+    float m_AtkSpeed = 1.f;
+
+    Prefab m_BulletPrefab;
 };
