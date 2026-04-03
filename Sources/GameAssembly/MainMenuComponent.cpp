@@ -15,17 +15,24 @@ void MainMenuComponent::OnRender(float dt)
     ImGui::SetNextWindowPos(ImVec2(0, 0));
     ImGui::SetNextWindowSize(io.DisplaySize);
 
-    // Couleur noire opaque
-    ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0, 0, 0, 1));
-
     ImGui::Begin("Background", nullptr,
         ImGuiWindowFlags_NoDecoration |
         ImGuiWindowFlags_NoMove |
-        ImGuiWindowFlags_NoInputs |   // important : laisse passer les clics au bouton
+        ImGuiWindowFlags_NoInputs |
         ImGuiWindowFlags_NoBringToFrontOnFocus);
 
+    ImDrawList* drawList = ImGui::GetBackgroundDrawList();
+
+    drawList->AddRectFilled(
+        ImVec2(0, 0),
+        io.DisplaySize,
+        IM_COL32(0, 0, 0, 255)
+    );
+
+    ImGui::End();
+
     // ==== TITLE ====
-    ImGui::SetNextWindowPos(ImVec2(width * 0.5f, height * 0.1f), ImGuiCond_Always, ImVec2(0.5f, 0.0f));
+    ImGui::SetNextWindowPos(ImVec2(width * 0.5f, height * 0.2f), ImGuiCond_Always, ImVec2(0.5f, 0.0f));
     ImGui::SetNextWindowBgAlpha(0.0f);
 
     ImGui::Begin("Title", nullptr,
@@ -58,6 +65,4 @@ void MainMenuComponent::OnRender(float dt)
     }
 
     ImGui::End();
-
-    ImGui::PopStyleColor();
 }
