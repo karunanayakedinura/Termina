@@ -9,14 +9,16 @@
 #include "EnnemySpawner.hpp"
 #include "WeaponComponent.hpp"
 #include "ProjectileComponent.hpp"
+#include "WeaponSpawner.hpp"
 
 COMPONENT_MODULE_BEGIN()
     REGISTER_COMPONENT(FlyCamComponent, "Fly Cam Component")
     REGISTER_COMPONENT(ParticleSystemComponent, "Particle System")
     REGISTER_COMPONENT(PhysicsTestComponent, "Physics Test")
-    REGISTER_COMPONENT(PlayerComponent, "Player Component")
+    REGISTER_COMPONENT(GameComponent::PlayerComponent, "Player Component")
     REGISTER_COMPONENT(EnnemyComponent, "Ennemy Component")
     REGISTER_COMPONENT(EnnemySpawner, "Ennemy Spawner")
-    REGISTER_COMPONENT(WeaponComponent, "Weapon Component")
-    REGISTER_COMPONENT(ProjectileComponent, "Projectile Component")
+    REGISTER_COMPONENT(GameComponent::WeaponComponent, "Weapon Component")
+    REGISTER_COMPONENT(GameComponent::ProjectileComponent, "Projectile Component")
+    REGISTER_COMPONENT(GameComponent::WeaponSpawner, "Weapon Spawner")
 COMPONENT_MODULE_END()

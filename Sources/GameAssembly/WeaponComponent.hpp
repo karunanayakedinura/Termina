@@ -4,23 +4,25 @@
 
 using namespace TerminaScript;
 
-class WeaponComponent : public TerminaScript::ScriptableComponent {
-public:
-    WeaponComponent() = default;
-    WeaponComponent(Termina::Actor* owner) : TerminaScript::ScriptableComponent(owner) {}
+namespace GameComponent {
+    class WeaponComponent : public TerminaScript::ScriptableComponent {
+    public:
+        WeaponComponent() = default;
+        WeaponComponent(Termina::Actor* owner) : TerminaScript::ScriptableComponent(owner) {}
 
-    void Start() override;
-    void Update(float deltaTime) override;
-    void Inspect() override;
-    void Serialize(nlohmann::json& out) const override;
-    void Deserialize(const nlohmann::json& in) override;
+        void Start() override;
+        void Update(float deltaTime) override;
+        void Inspect() override;
+        void Serialize(nlohmann::json& out) const override;
+        void Deserialize(const nlohmann::json& in) override;
 
-    void MunitionSpawner();
+        void MunitionSpawner();
 
-private:
-    int m_ID = 1; // si + armes
-    int m_Ammo = 5;
-    float m_AtkSpeed = 1.f;
+    private:
+        int m_ID = 1; // si + armes
+        int m_Ammo = 5;
+        float m_AtkSpeed = 1.f;
 
-    Prefab m_BulletPrefab;
-};
+        TerminaScript::Prefab m_Bullet;
+    };
+}

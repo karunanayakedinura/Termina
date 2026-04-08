@@ -8,8 +8,8 @@
                     "data": {
                         "position": [
                             0.0,
-                            1.7751073837280273,
-                            -1.0948835611343384
+                            1.9781616926193237,
+                            -1.2280380725860596
                         ],
                         "rotation": [
                             1.0,
@@ -18,9 +18,9 @@
                             0.0
                         ],
                         "scale": [
-                            5.690000057220459,
-                            5.690000057220459,
-                            5.690000057220459
+                            0.009999999776482582,
+                            0.009999999776482582,
+                            0.009999999776482582
                         ]
                     },
                     "type": "Transform"
@@ -29,20 +29,24 @@
                     "active": true,
                     "data": {
                         "material_overrides": {
-                            "0": "Assets\\Models\\Bullet\\Bullet_mat0.mat"
+                            "0": "Assets\\Models\\Weapon\\other\\gun_mat0.mat"
                         },
-                        "model": "Assets\\Models\\Bullet\\Bullet.gltf"
+                        "model": "Assets\\Models\\Weapon\\other\\gun.glb"
                     },
                     "type": "Mesh Component"
                 },
                 {
                     "active": true,
-                    "data": {},
-                    "type": "Projectile Component"
+                    "data": {
+                        "ID": 1,
+                        "ammo": 5,
+                        "atkSpeed": 1.0
+                    },
+                    "type": "Weapon Component"
                 }
             ],
-            "id": "1119187812475949983",
-            "name": "BulletPrefab",
+            "id": "8394757957101136783",
+            "name": "Gun",
             "parentId": null
         }
     ],

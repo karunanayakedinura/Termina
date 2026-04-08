@@ -5,46 +5,51 @@
 
 using namespace TerminaScript;
 
-class PlayerComponent : public TerminaScript::ScriptableComponent{
-public:
-    PlayerComponent() = default;
-    PlayerComponent(Termina::Actor* owner) : TerminaScript::ScriptableComponent(owner) {}
+namespace GameComponent {
+    class PlayerComponent : public TerminaScript::ScriptableComponent {
+    public:
+        PlayerComponent() = default;
+        PlayerComponent(Termina::Actor* owner) : TerminaScript::ScriptableComponent(owner) {}
 
-    void Start() override;
-    void Stop() override;
-    void Update(float deltaTime) override;
-    void Inspect() override;
-    void Serialize(nlohmann::json& out) const override;
-    void Deserialize(const nlohmann::json& in) override;
+        void Start() override;
+        void Stop() override;
+        void Update(float deltaTime) override;
 
-    void Move(float speed, float deltaTime);
-    void AtkDist();
-    void AtkCorps(EnnemyComponent& other);
+        void Move(float speed, float deltaTime);
+        void AtkDist();
+        void AtkCorps(Termina::Actor& other);
+        void OnCollisionEnter(Termina::Actor* other) override;
 
-    // void UpdateCurrentWeapon();
-    // bool CanRespawn();
+        void Inspect() override;
+        void Serialize(nlohmann::json& out) const override;
+        void Deserialize(const nlohmann::json& in) override;
 
-    //////// GETTER & SETTER //////// 
-    float SetHealth(float newVal) { return m_Health -= newVal; };
-    /*float SetSpeed(float newVal);
-    float SetShield(float newVal);
-    float SetAtkSpeedC(float newVal);
-    float SetAtkSpeedD(float newVal);*/
+        // void UpdateCurrentWeapon();
+        // bool CanRespawn();
 
-private:
-    float m_MaxHealth = 100.f;
-    float m_Health = 100.f;
-    float m_Speed = 1.f;
-    float m_Shield;
-    float m_Range;
-    float m_AtkC = 30.f;
-    float m_AtkD = 15.f;
-    float m_Damage = 10.f;
+        //////// GETTER & SETTER //////// 
+        float SetHealth(float newVal) { return m_Health -= newVal; };
+        /*float SetSpeed(float newVal);
+        float SetShield(float newVal);
+        float SetAtkSpeedC(float newVal);
+        float SetAtkSpeedD(float newVal);*/
 
-    int m_WeaponID = 0; // Si + armes
-    bool m_WeaponInUse = false;
-    bool m_CanRespawn = false;
+    private:
+        float m_MaxHealth = 100.f;
+        float m_Health = 100.f;
+        float m_Speed = 1.f;
+        float m_Shield;
+        float m_Range;
+        float m_AtkC = 30.f;
+        float m_AtkD = 15.f;
+        float m_Damage = 10.f;
 
-    WeaponComponent* m_Weapon = nullptr;
-    EnnemyComponent* m_Enemy = nullptr;
-};
+        int m_WeaponID = 0; // Si + armes
+        bool m_HasWeapon = false;
+        bool m_WeaponInUse = false;
+        bool m_CanRespawn = false;
+
+        Termina::Actor* m_Weapon = nullptr;
+        Termina::Actor* m_Enemy = nullptr;
+    };
+}

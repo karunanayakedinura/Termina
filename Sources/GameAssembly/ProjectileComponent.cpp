@@ -2,13 +2,13 @@
 #include <Termina/Core/Logger.hpp>
 #include <ImGui/imgui.h>
 
-void ProjectileComponent::Start() {}
+void GameComponent::ProjectileComponent::Start() {}
 
-void ProjectileComponent::Stop() {
+void GameComponent::ProjectileComponent::Stop() {
 	Destroy(m_Owner);
 }
 
-void ProjectileComponent::Update(float deltaTime) {
+void GameComponent::ProjectileComponent::Update(float deltaTime) {
 	glm::vec3 pos = m_Transform->GetPosition() + glm::vec3(0.f, 0.f, -m_Speed) * deltaTime;
  	m_Transform->SetPosition(pos);
 
@@ -17,6 +17,6 @@ void ProjectileComponent::Update(float deltaTime) {
 	}*/
 }
 
-void ProjectileComponent::Inspect(){
+void GameComponent::ProjectileComponent::Inspect(){
 	ImGui::DragFloat("Speed", &m_Speed, 0.5f);
 }
