@@ -11,6 +11,10 @@ public:
     void Start()  override;
     void Update(float deltaTime) override;
 
+    void SetHealth(float value) { health = value; }
+    void SetDead(bool value) { isDead = value; }
+
+    
 private:
     float health = 100;
     float speed = 1;
@@ -19,6 +23,7 @@ private:
     float atkSpeedD = 1;
 
     int weapon = 0;
+    bool isDead = false;
     bool isArmed = false;
     bool canRespawn = false;
 };

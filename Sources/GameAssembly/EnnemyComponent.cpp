@@ -1,79 +1,45 @@
 ﻿#include "EnnemyComponent.hpp"
-#include <ImGui/imgui.h>
+#include "PlayerComponent.hpp"
+#include "GameManagerComponent.hpp"
 #include <Termina/Core/Logger.hpp>
-
-void EnnemyComponent::Awake()
-{
-    // Initialisation
-}
+#include <ImGui/imgui.h>
 
 void EnnemyComponent::Start()
 {
-    TN_INFO("Enemy spawned with %d HP", GetHealth());
-
-    // Recupere l'acteur nomme "Player"
-    m_Player = m_Owner->GetParentWorld()->GetActorByName("Player");
-
-    if (!m_Player)
-        TN_WARN("Enemy: Player not found in scene!");
+    TN_INFO("Enemy spawned with %d HP", m_Health);
 }
 
 void EnnemyComponent::Update(float deltaTime)
 {
-    if (!m_Player)
-        return;
-
-    // Position de l'ennemi
-    glm::vec3 pos = m_Transform->GetPosition();
-
-    // Position du joueur
-    glm::vec3 target = m_Player->GetComponent<Termina::Transform>().GetPosition();
-
-    // Direction vers le joueur
-    glm::vec3 dir = target - pos;
-
-    // On ignore la hauteur
-    dir.y = 0.0f;
-
-    // Normalisation
-    dir = glm::normalize(dir);
-
-    // --- ROTATION AUTOMATIQUE ---
-    glm::quat rot = glm::quatLookAt(dir, glm::vec3(0, 1, 0));
-    m_Transform->SetRotation(rot);
-
-    // --- DEPLACEMENT ---
-    pos += dir * m_Speed * deltaTime;
-    m_Transform->SetPosition(pos);
-
-    // --- COMPORTEMENT SPECIFIQUE ---
-    Attack(deltaTime); 
+    if (m_Health <= 0 && GameManagerComponent::Instance)
+    {
+        GameManagerComponent::Instance->TriggerWin();
+    }
 }
 
+void EnnemyComponent::TakeDamage(int amount)
+{
+    m_Health -= amount;
+    TN_INFO("Enemy took %d damage, HP = %d", amount, m_Health);
+
+    if (m_Health <= 0 && GameManagerComponent::Instance)
+    {
+        GameManagerComponent::Instance->TriggerWin();
+    }
+}
+
+// === Gestion collision joueur ===
 void EnnemyComponent::OnCollisionEnter(Termina::Actor* other)
 {
-    TN_INFO("Enemy collided with %s (HP = %d)",
-        other->GetName().c_str(),
-        GetHealth());
-}
+    if (!other->HasComponent<PlayerComponent>())
+        return;
 
-void EnnemyComponent::Inspect()
-{
-    ImGui::DragFloat("Speed", &m_Speed, 0.1f);
-    ImGui::DragInt("Health", &m_Health, 1, 0, 100);
-    ImGui::DragInt("Damage", &m_Damage, 1, 0, 100);
-}
+    auto& player = other->GetComponent<PlayerComponent>();
 
-void EnnemyComponent::Serialize(nlohmann::json& out) const
-{
-    out["speed"] = m_Speed;
-    out["health"] = m_Health;
-    out["damage"] = m_Damage;
-}
-
-void EnnemyComponent::Deserialize(const nlohmann::json& in)
-{
-    if (in.contains("speed"))  m_Speed = in["speed"];
-    if (in.contains("health")) m_Health = in["health"];
-    if (in.contains("damage")) m_Damage = in["damage"];
+    // Si le joueur clique gauche pendant la collision
+    if (Input::IsMouseButtonPressed(Termina::MouseButton::Left))
+    {
+        TakeDamage(10);
+        TN_INFO("Enemy damaged by player collision!");
+    }
 }

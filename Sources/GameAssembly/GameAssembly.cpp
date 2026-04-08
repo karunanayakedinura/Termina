@@ -9,6 +9,9 @@
 #include "MeleeEnnemyComponent.hpp"
 #include "RangedEnnemyComponent.hpp"
 #include "MainMenuComponent.hpp"
+#include "GameManagerComponent.hpp"
+#include "WinScreen.hpp"
+#include "LoseScreen.hpp"
 
 COMPONENT_MODULE_BEGIN()
     REGISTER_COMPONENT(FlyCamComponent, "Fly Cam Component")
@@ -19,4 +22,7 @@ COMPONENT_MODULE_BEGIN()
     REGISTER_COMPONENT(MeleeEnnemyComponent, "Melee Ennemy Component")
     REGISTER_COMPONENT(RangedEnnemyComponent, "Ranged Ennemy Component")
     REGISTER_COMPONENT(MainMenuComponent, "Main Menu Component")
+    REGISTER_COMPONENT(GameManagerComponent, "Game Manager Component")
+    REGISTER_COMPONENT(WinScreen, "Win Screen")
+    REGISTER_COMPONENT(LoseScreen, "Lose Screen")
 COMPONENT_MODULE_END()
