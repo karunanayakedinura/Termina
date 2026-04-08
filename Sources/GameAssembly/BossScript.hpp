@@ -48,9 +48,10 @@ private:
     // -------- Stats --------
     float m_Health = 100.0f;
     float m_MaxHealth = 100.0f;
-    float m_Speed = 1.0f;
-    float m_MeleeAttackRange = 0.5f;
+    float m_Speed = 2.0f;
+    float m_MeleeAttackRange = 1.5f;
     float m_RangedAttackRange = 4.0f;
+    float m_PrepareRange = 3.0f;
 
     // -------- State --------
     Phase m_CurrentPhase = Phase::Intro;
@@ -80,4 +81,56 @@ private:
     bool m_IsDead = false;
     float m_DeathTimer = 0.0f;
     float m_DeathDuration = 2.0f;
+
+    // -------- Melee --------
+    enum class MeleeState
+    {
+        None,
+        Forward,
+        Backward
+    };
+
+    MeleeState m_MeleeState = MeleeState::None;
+    float m_MeleeTimer = 0.0f;
+    float m_MeleeForwardDuration = 0.15f;
+    float m_MeleeBackwardDuration = 0.2f;
+    float m_MeleeSpeed = 6.0f;
+
+    glm::vec3 m_MeleeDir = glm::vec3(0.0f);
+
+    // -------- Attacks --------
+    enum class AttackType
+    {
+        None,
+        MeleeBasic,
+        Jump,
+        DashCombo,
+        Ranged
+    };
+
+    AttackType m_CurrentAttack = AttackType::None;
+    AttackType m_NextAttack = AttackType::None;
+
+    bool m_IsAttacking = false;
+    float m_AttackLocalTimer = 0.0f;
+
+    glm::vec3 m_JumpStartPos = glm::vec3(0.0f);
+    glm::vec3 m_JumpTargetPos = glm::vec3(0.0f);
+    float m_JumpStartY = 0.0f;
+
+    // -------- Dash Combo --------
+    enum class ComboState
+    {
+        Positioning,
+        Dash,
+        Check,
+        Recovery
+    };
+
+    ComboState m_ComboState = ComboState::Positioning;
+
+    int m_ComboStep = 0;
+    float m_ComboTimer = 0.0f;
+
+    glm::vec3 m_DashDir = glm::vec3(0.0f);
 };
