@@ -10,6 +10,7 @@ namespace GameComponent {
         void Start() override;
         void Stop() override;
         void Update(float deltaTime) override;
+        void OnTriggerEnter(Termina::Actor* other) override;
 
     private:
         float m_Speed = 10.f;

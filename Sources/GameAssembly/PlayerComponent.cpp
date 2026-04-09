@@ -62,22 +62,10 @@ void GameComponent::PlayerComponent::AtkCorps(Termina::Actor& enemy) {
 void GameComponent::PlayerComponent::OnTriggerEnter(Termina::Actor* other) {
     /*TN_INFO("Collision");
     if(other->GetName() == "Gun") {
-        other->GetComponent<Termina::Transform>().SetPosition(this->m_Transform->GetPosition());       COLLISION BUG (SPAWNER)
+        other->GetComponent<Termina::Transform>().SetPosition(this->m_Transform->GetPosition());      (SPAWNER)
         m_Weapon = other;
         m_HasWeapon = true;
     }*/
-
-    //if (other->GetName() == "Enemy") {
-    //  SetHealth(other.m_Damage);
-    // }
-
-    //if (other->GetName() == "RangeEnemy") {
-    //  SetHealth(other.m_Damage);
-    // }
-
-    //if (other->GetName() == "MeleeEnemy") {
-    //  SetHealth(other.m_Damage);
-    // }
 }
 
 

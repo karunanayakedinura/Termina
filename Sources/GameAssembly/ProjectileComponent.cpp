@@ -1,6 +1,7 @@
 #include "ProjectileComponent.hpp"
 #include <Termina/Core/Logger.hpp>
 #include <ImGui/imgui.h>
+#include "MeleeEnnemyComponent.hpp"
 
 void GameComponent::ProjectileComponent::Start() {}
 
@@ -17,4 +18,10 @@ void GameComponent::ProjectileComponent::Update(float deltaTime) {
 	/*if (m_Transform->GetPosition().z < -170) {
 		Destroy(m_Owner);
 	}*/
+}
+
+void GameComponent::ProjectileComponent::OnTriggerEnter(Termina::Actor* other) {
+	if (other->HasComponent(MeleeEnnemyComponent)) {
+		other->TakeDamage(10);
+	}
 }
