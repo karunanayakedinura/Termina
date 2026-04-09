@@ -43,9 +43,54 @@
                         "atkSpeed": 1.0
                     },
                     "type": "Weapon Component"
+                },
+                {
+                    "active": true,
+                    "data": {
+                        "half_extents": [
+                            0.10000000149011612,
+                            0.10000000149011612,
+                            0.10000000149011612
+                        ],
+                        "offset": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "rot_off": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ]
+                    },
+                    "type": "Box Collider"
+                },
+                {
+                    "active": true,
+                    "data": {
+                        "allow_sleep": false,
+                        "angular_damping": 0.05000000074505806,
+                        "freeze_pos": [
+                            true,
+                            true,
+                            true
+                        ],
+                        "freeze_rot": [
+                            true,
+                            true,
+                            true
+                        ],
+                        "gravity_factor": 1.0,
+                        "is_sensor": true,
+                        "linear_damping": 0.05000000074505806,
+                        "mass": 1.0,
+                        "type": 1
+                    },
+                    "type": "Rigidbody"
                 }
             ],
-            "id": "8394757957101136783",
+            "id": "1600343203845431407",
             "name": "Gun",
             "parentId": null
         }

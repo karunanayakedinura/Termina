@@ -9,11 +9,22 @@ void GameComponent::WeaponComponent::Start(){
 }
 
 void GameComponent::WeaponComponent::Update(float deltaTime) {
+    if (Time >= Timer && m_Ammo > 0) {
+        m_CanShoot = true;
+        m_Ammo -= 1;
+    }
+    else {
+        Time += deltaTime;
+    }
 }
 
 void GameComponent::WeaponComponent::MunitionSpawner(){
-	Termina::Actor* bullet = Instantiate(m_Bullet);
-	//bullet->GetComponent<Termina::Transform>().SetPosition(this->m_Transform->GetPosition());
+    if (m_CanShoot){
+        Termina::Actor* bullet = Instantiate(m_Bullet);
+        bullet->GetComponent<Termina::Transform>().SetPosition(this->m_Transform->GetPosition());
+        m_CanShoot = false;
+        Time = 0.f;
+    }
 }
 
 void GameComponent::WeaponComponent::Inspect()

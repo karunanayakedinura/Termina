@@ -2,6 +2,7 @@
 #include <Termina/Scripting/API/ScriptingAPI.hpp>
 #include <GameAssembly/EnnemyComponent.hpp>
 #include "WeaponComponent.hpp"
+#include "WeaponSpawner.hpp"
 
 using namespace TerminaScript;
 
@@ -18,7 +19,7 @@ namespace GameComponent {
         void Move(float speed, float deltaTime);
         void AtkDist();
         void AtkCorps(Termina::Actor& other);
-        void OnCollisionEnter(Termina::Actor* other) override;
+        void OnTriggerEnter(Termina::Actor* other) override;
 
         void Inspect() override;
         void Serialize(nlohmann::json& out) const override;
@@ -49,6 +50,7 @@ namespace GameComponent {
         bool m_WeaponInUse = false;
         bool m_CanRespawn = false;
 
+        TerminaScript::Prefab m_Gun;
         Termina::Actor* m_Weapon = nullptr;
         Termina::Actor* m_Enemy = nullptr;
     };

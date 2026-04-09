@@ -20,8 +20,12 @@ namespace GameComponent {
 
     private:
         int m_ID = 1; // si + armes
-        int m_Ammo = 5;
-        float m_AtkSpeed = 1.f;
+        int m_Ammo = 20;
+        float m_AtkSpeed = 10.f;
+        bool m_CanShoot = false;
+
+        float Timer = 1.f;
+        float Time;
 
         TerminaScript::Prefab m_Bullet;
     };

@@ -9,7 +9,6 @@
 #include "EnnemySpawner.hpp"
 #include "WeaponComponent.hpp"
 #include "ProjectileComponent.hpp"
-#include "WeaponSpawner.hpp"
 
 COMPONENT_MODULE_BEGIN()
     REGISTER_COMPONENT(FlyCamComponent, "Fly Cam Component")

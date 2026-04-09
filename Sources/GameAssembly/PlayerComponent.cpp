@@ -2,7 +2,13 @@
 #include <Termina/Core/Logger.hpp>
 #include <ImGui/imgui.h>
 
-void GameComponent::PlayerComponent::Start(){}
+void GameComponent::PlayerComponent::Start(){
+    m_Gun = TerminaScript::Prefab("Assets/Prefabs/Gun.trp");
+    Termina::Actor* gun = Instantiate(m_Gun);
+    m_Weapon = gun;
+    m_Weapon->GetComponent<Termina::Transform>().SetPosition(this->m_Transform->GetPosition() + glm::vec3(0.3f, 2.2f,-0.5f));
+    //m_Weapon->GetComponent<Termina::Transform>().SetRotation(glm::quat(0, 0, 0, 0));
+}
 
 void GameComponent::PlayerComponent::Stop()
 {
@@ -12,23 +18,14 @@ void GameComponent::PlayerComponent::Stop()
 void GameComponent::PlayerComponent::Update(float deltaTime){
     Move(m_Speed, deltaTime);
 
-    /*if (Input::IsMouseButtonPressed(Termina::MouseButton::Left)) {
-        switch (m_WeaponInUse) {
-        case 0:
-            AtkCorps(*m_enemy);
-            break;
-
-        case 1: /// CD?
-            AtkDist();
-            break;
-        }
-    }*/
     if (Input::IsMouseButtonPressed(Termina::MouseButton::Left)) {
-        TN_INFO("Atk Distance DONE");
+        AtkCorps(*m_Enemy);
+    }
+    if (Input::IsMouseButtonPressed(Termina::MouseButton::Left)) {
         AtkDist();
     }
 
-    if (m_CanRespawn && m_Health <= 0) {
+    if (m_CanRespawn && m_Health <= 0) {    ///// BUFF
         m_Health = m_MaxHealth / 2;
     }
 }
@@ -52,7 +49,6 @@ void GameComponent::PlayerComponent::Move(float speed, float deltaTime) {
 }
 
 void GameComponent::PlayerComponent::AtkDist() {
-    //TN_INFO("Atk Distance DONE");
     m_Weapon->GetComponent<GameComponent::WeaponComponent>().MunitionSpawner();
 }
 
@@ -64,13 +60,13 @@ void GameComponent::PlayerComponent::AtkCorps(Termina::Actor& enemy) {
     }
 }
 
-void GameComponent::PlayerComponent::OnCollisionEnter(Termina::Actor* other) {
-    TN_INFO("Collision");
+void GameComponent::PlayerComponent::OnTriggerEnter(Termina::Actor* other) {
+    /*TN_INFO("Collision");
     if(other->GetName() == "Gun") {
-        other->GetComponent<Termina::Transform>().SetPosition(this->m_Transform->GetPosition());
+        other->GetComponent<Termina::Transform>().SetPosition(this->m_Transform->GetPosition());       COLLISION BUG (SPAWNER)
         m_Weapon = other;
         m_HasWeapon = true;
-    }
+    }*/
 
     //if (other->GetName() == "Enemy") {
     //  SetHealth(other.m_Damage);

@@ -12,11 +12,9 @@ void GameComponent::ProjectileComponent::Update(float deltaTime) {
 	glm::vec3 pos = m_Transform->GetPosition() + glm::vec3(0.f, 0.f, -m_Speed) * deltaTime;
  	m_Transform->SetPosition(pos);
 
-	/*if (m_Transform->GetPosition().z < 300 || collision) {
+
+	///////////// CRASH /////////////////
+	/*if (m_Transform->GetPosition().z < -170) {
 		Destroy(m_Owner);
 	}*/
-}
-
-void GameComponent::ProjectileComponent::Inspect(){
-	ImGui::DragFloat("Speed", &m_Speed, 0.5f);
 }
