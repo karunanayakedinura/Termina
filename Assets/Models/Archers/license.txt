@@ -1,0 +1,11 @@
+Model Information:
+* title:	TableTopWars - Female Archer
+* source:	https://sketchfab.com/3d-models/tabletopwars-female-archer-71f37a1f5d8d435f9160bf379a14c04e
+* author:	DilutedEgo (https://sketchfab.com/DilutedEgo)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "TableTopWars - Female Archer" (https://sketchfab.com/3d-models/tabletopwars-female-archer-71f37a1f5d8d435f9160bf379a14c04e) by DilutedEgo (https://sketchfab.com/DilutedEgo) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

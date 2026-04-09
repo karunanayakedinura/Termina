@@ -13,15 +13,15 @@ public:
 
     void Start();
     void Update(float deltaTime);
-    void OnCollisionEnter(Termina::Actor* other);
+    void OnTriggerEnter(Termina::Actor* other) override;
     void TakeDamage(float value);
 
 private:
     Termina::Actor* m_Player = nullptr;
 
-    float m_Speed = 3.0f;
+    float m_Speed = 10.0f;
     float m_AttackRange = 1.5f;
     float m_Damage = 10.0f;
 
-    int m_Health = 50;
+    int m_Health = 60;
 };

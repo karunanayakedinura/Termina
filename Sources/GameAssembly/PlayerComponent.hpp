@@ -15,6 +15,8 @@ namespace GameComponent {
         void Start() override;
         void Stop() override;
         void Update(float deltaTime) override;
+		void OnTriggerEnter(Termina::Actor* other) override;
+
 
         void Move(float speed, float deltaTime);
         void AtkDist();

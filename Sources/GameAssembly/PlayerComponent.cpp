@@ -96,7 +96,7 @@ void GameComponent::PlayerComponent::OnTriggerEnter(Termina::Actor* other) {
         m_Weapon = other;
         m_HasWeapon = true;
     }*/
-	
+
     TN_INFO("Player OnCollisionEnter with {}", other ? other->GetName().c_str() : "null");
 
     if (!other)

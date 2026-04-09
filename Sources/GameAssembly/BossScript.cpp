@@ -1,5 +1,6 @@
 #include "BossScript.hpp"
 #include "ParticleSystem.hpp"
+#include "GameManagerComponent.hpp"
 #include <ImGui/imgui.h>
 #include <Termina/Core/Logger.hpp>
 
@@ -669,4 +670,22 @@ void BossScript::TakeDamage(float amount)
     m_Health -= amount;
 
     TN_INFO("Boss took damage: %.1f (HP: %.1f)", amount, m_Health);
+}
+
+void BossScript::OnTriggerEnter(Termina::Actor* other)
+{
+    TN_INFO("Boss OnCollisionEnter with {}", other ? other->GetName().c_str() : "null");
+
+
+    if (!other)
+        return;
+
+    if (other->GetName() == "Player")
+    {
+        m_Health -= 10;
+        TN_INFO("Boss enemy took 10 damage, HP = %d", m_Health);
+
+        if (m_Health <= 0 && GameManagerComponent::Instance)
+            GameManagerComponent::Instance->TriggerWin();
+    }
 }
