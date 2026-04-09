@@ -5,21 +5,34 @@
 #include "ParticleSystem.hpp"
 #include "PhysicsTestComponent.hpp"
 #include "PlayerComponent.hpp"
-#include "EnnemyComponent.hpp"
+#include "BossScript.hpp"
 #include "EnnemySpawner.hpp"
 #include "WeaponComponent.hpp"
 #include "ProjectileComponent.hpp"
 #include "GunPos.hpp"
+#include "MeleeEnnemyComponent.hpp"
+#include "RangedEnnemyComponent.hpp"
+#include "MainMenuComponent.hpp"
+#include "GameManagerComponent.hpp"
+#include "WinScreen.hpp"
+#include "LoseScreen.hpp"
 
 COMPONENT_MODULE_BEGIN()
     REGISTER_COMPONENT(FlyCamComponent, "Fly Cam Component")
     REGISTER_COMPONENT(ParticleSystemComponent, "Particle System")
     REGISTER_COMPONENT(PhysicsTestComponent, "Physics Test")
     REGISTER_COMPONENT(GameComponent::PlayerComponent, "Player Component")
-    REGISTER_COMPONENT(EnnemyComponent, "Ennemy Component")
     REGISTER_COMPONENT(EnnemySpawner, "Ennemy Spawner")
     REGISTER_COMPONENT(GameComponent::WeaponComponent, "Weapon Component")
     REGISTER_COMPONENT(GameComponent::ProjectileComponent, "Projectile Component")
     REGISTER_COMPONENT(GameComponent::WeaponSpawner, "Weapon Spawner")
     REGISTER_COMPONENT(GunPos, "WeaponLoc")
+    REGISTER_COMPONENT(BossScript, "Boss Script")
+    REGISTER_COMPONENT(EnnemySpawner, "Ennemy Spawner")
+    REGISTER_COMPONENT(MeleeEnnemyComponent, "Melee Ennemy Component")
+    REGISTER_COMPONENT(RangedEnnemyComponent, "Ranged Ennemy Component")
+    REGISTER_COMPONENT(MainMenuComponent, "Main Menu Component")
+    REGISTER_COMPONENT(GameManagerComponent, "Game Manager Component")
+    REGISTER_COMPONENT(WinScreen, "Win Screen")
+    REGISTER_COMPONENT(LoseScreen, "Lose Screen")
 COMPONENT_MODULE_END()

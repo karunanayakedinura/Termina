@@ -30,10 +30,10 @@ namespace GameComponent {
 
         //////// GETTER & SETTER //////// 
         float SetHealth(float newVal) { return m_Health -= newVal; };
-        /*float SetSpeed(float newVal);
-        float SetShield(float newVal);
-        float SetAtkSpeedC(float newVal);
-        float SetAtkSpeedD(float newVal);*/
+        void SetHealth(float value) { health = value; }
+		void SetDead(bool value) { isDead = value; }
+		float GetHealth() const { return health; }
+		void TakeDamage(float value);
 
     private:
         float m_MaxHealth = 100.f;
