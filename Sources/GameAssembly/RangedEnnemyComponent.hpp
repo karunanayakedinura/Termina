@@ -11,7 +11,10 @@ public:
         : ScriptableComponent(owner) {
     }
 
-    void Attack(float deltaTime);
+    void Start();
+    void Update(float deltaTime);
+    void OnCollisionEnter(Termina::Actor* other);
+    void TakeDamage(float value);
 
 private:
     Termina::Actor* m_Player = nullptr;
@@ -22,4 +25,7 @@ private:
 
     float m_ShootCooldown = 1.5f;
     float m_Timer = 0.0f;
+
+    float m_Damage = 5.0f;
+    int m_Health = 40;
 };

@@ -17,4 +17,7 @@ public:
 protected:
     int m_Health = 50;
     int m_Damage = 10;
+    float m_Speed = 3.0f;
+    Termina::Actor* m_Player = nullptr; 
+
 };

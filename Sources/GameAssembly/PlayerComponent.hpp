@@ -10,9 +10,13 @@ public:
 
     void Start()  override;
     void Update(float deltaTime) override;
+    void OnCollisionEnter(Termina::Actor* other) override;
+
 
     void SetHealth(float value) { health = value; }
     void SetDead(bool value) { isDead = value; }
+    float GetHealth() const { return health; }
+    void TakeDamage(float value);
 
     
 private:

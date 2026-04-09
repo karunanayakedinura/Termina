@@ -33,3 +33,41 @@ void PlayerComponent::Update(float deltaTime)
             GameManagerComponent::Instance->TriggerLose();
     }
 }
+
+void PlayerComponent::OnCollisionEnter(Termina::Actor* other)
+{
+    TN_INFO("Player OnCollisionEnter with {}", other ? other->GetName().c_str() : "null");
+
+    if (!other)
+        return;
+
+    // Si on touche un ennemi
+    if (other->GetName() == "Enemy" || other->GetName() == "MeleeEnemy" || other->GetName() == "RangedEnemy")
+    {
+        health -= 10.0f;
+        TN_INFO("Player took 10 damage, HP = %f", health);
+
+        if (health <= 0.0f && !isDead)
+        {
+            isDead = true;
+            TN_INFO("Player died!");
+            if (GameManagerComponent::Instance)
+                GameManagerComponent::Instance->TriggerLose();
+        }
+    }
+}
+
+void PlayerComponent::TakeDamage(float value)
+{
+    health -= value;
+    TN_INFO("Player took %f damage, HP = %f", value, health);
+
+    if (!isDead && health <= 0.0f)
+    {
+        isDead = true;
+        TN_INFO("Player died!");
+        if (GameManagerComponent::Instance)
+            GameManagerComponent::Instance->TriggerLose();
+    }
+}
+
