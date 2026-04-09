@@ -3,22 +3,21 @@
 #include <ImGui/imgui.h>
 
 void GameComponent::PlayerComponent::Start(){
-    m_Gun = TerminaScript::Prefab("Assets/Prefabs/Gun.trp");
-    Termina::Actor* gun = Instantiate(m_Gun);
+    auto* world = m_Owner->GetParentWorld();
+    Termina::Actor* gun = world->GetActorByName("Gun");
     m_Weapon = gun;
-    m_Weapon->GetComponent<Termina::Transform>().SetPosition(this->m_Transform->GetPosition() + glm::vec3(0.3f, 2.2f,-0.5f));
-    //m_Weapon->GetComponent<Termina::Transform>().SetRotation(glm::quat(0, 0, 0, 0));
 }
 
 void GameComponent::PlayerComponent::Stop()
 {
     m_Enemy = nullptr;
+    m_Weapon = nullptr;
 }
 
 void GameComponent::PlayerComponent::Update(float deltaTime){
     Move(m_Speed, deltaTime);
 
-    if (Input::IsMouseButtonPressed(Termina::MouseButton::Left)) {
+    if (Input::IsMouseButtonPressed(Termina::MouseButton::Right)) {
         AtkCorps(*m_Enemy);
     }
     if (Input::IsMouseButtonPressed(Termina::MouseButton::Left)) {

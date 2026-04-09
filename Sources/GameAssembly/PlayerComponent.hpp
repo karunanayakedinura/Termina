@@ -50,7 +50,6 @@ namespace GameComponent {
         bool m_WeaponInUse = false;
         bool m_CanRespawn = false;
 
-        TerminaScript::Prefab m_Gun;
         Termina::Actor* m_Weapon = nullptr;
         Termina::Actor* m_Enemy = nullptr;
     };

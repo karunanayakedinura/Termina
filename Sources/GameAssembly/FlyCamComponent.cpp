@@ -5,24 +5,24 @@
 
 void FlyCamComponent::Serialize(nlohmann::json& out) const
 {
-    out["moveSpeed"]      = m_MoveSpeed;
+    out["moveSpeed"] = m_MoveSpeed;
     out["fastMultiplier"] = m_FastMultiplier;
-    out["sensitivity"]    = m_Sensitivity;
-    out["acceleration"]   = m_Acceleration;
-    out["yaw"]            = m_Yaw;
-    out["pitch"]          = m_Pitch;
-    out["velocity"]       = { m_Velocity.x, m_Velocity.y, m_Velocity.z };
-    out["wasRotating"]    = m_WasRotating;
+    out["sensitivity"] = m_Sensitivity;
+    out["acceleration"] = m_Acceleration;
+    out["yaw"] = m_Yaw;
+    out["pitch"] = m_Pitch;
+    out["velocity"] = { m_Velocity.x, m_Velocity.y, m_Velocity.z };
+    out["wasRotating"] = m_WasRotating;
 }
 
 void FlyCamComponent::Deserialize(const nlohmann::json& in)
 {
-    if (in.contains("moveSpeed"))      m_MoveSpeed      = in["moveSpeed"];
+    if (in.contains("moveSpeed"))      m_MoveSpeed = in["moveSpeed"];
     if (in.contains("fastMultiplier")) m_FastMultiplier = in["fastMultiplier"];
-    if (in.contains("sensitivity"))    m_Sensitivity    = in["sensitivity"];
-    if (in.contains("acceleration"))   m_Acceleration   = in["acceleration"];
-    if (in.contains("yaw"))            m_Yaw            = in["yaw"];
-    if (in.contains("pitch"))          m_Pitch          = in["pitch"];
+    if (in.contains("sensitivity"))    m_Sensitivity = in["sensitivity"];
+    if (in.contains("acceleration"))   m_Acceleration = in["acceleration"];
+    if (in.contains("yaw"))            m_Yaw = in["yaw"];
+    if (in.contains("pitch"))          m_Pitch = in["pitch"];
     if (in.contains("velocity")) {
         const auto& v = in["velocity"];
         m_Velocity = { v[0], v[1], v[2] };
@@ -32,29 +32,29 @@ void FlyCamComponent::Deserialize(const nlohmann::json& in)
 
 void FlyCamComponent::Update(float deltaTime)
 {
-    bool rotating = Input::IsMouseButtonHeld(Termina::MouseButton::Right);
+    //bool rotating = Input::IsMouseButtonHeld(Termina::MouseButton::Right);
 
-    if (rotating != m_WasRotating)
-    {
-        Input::SetCursorVisible(!rotating);
-        Input::SetCursorLocked(rotating);
-        m_WasRotating = rotating;
-    }
+    //if (rotating != m_WasRotating)
+    //{
+    //    Input::SetCursorVisible(!rotating);
+    //    Input::SetCursorLocked(rotating);
+    //    m_WasRotating = rotating;
+    //}
 
-    if (rotating)
-    {
-        glm::vec2 delta = Input::GetMouseDelta();
-        m_Yaw   -= delta.x * m_Sensitivity;
-        m_Pitch -= delta.y * m_Sensitivity;
-        m_Pitch = std::clamp(m_Pitch, -89.0f, 89.0f);
+    //if (rotating)
+    //{
+    //    glm::vec2 delta = Input::GetMouseDelta();
+    //    m_Yaw -= delta.x * m_Sensitivity;
+    //    m_Pitch -= delta.y * m_Sensitivity;
+    //    m_Pitch = std::clamp(m_Pitch, -89.0f, 89.0f);
 
-        glm::quat pitchQuat = glm::angleAxis(glm::radians(m_Pitch), glm::vec3(1.0f, 0.0f, 0.0f));
-        glm::quat yawQuat   = glm::angleAxis(glm::radians(m_Yaw), glm::vec3(0.0f, 1.0f, 0.0f));
-        m_Transform->SetRotation(yawQuat * pitchQuat);
-    }
+    //    glm::quat pitchQuat = glm::angleAxis(glm::radians(m_Pitch), glm::vec3(1.0f, 0.0f, 0.0f));
+    //    glm::quat yawQuat = glm::angleAxis(glm::radians(m_Yaw), glm::vec3(0.0f, 1.0f, 0.0f));
+    //    m_Transform->SetRotation(yawQuat * pitchQuat);
+    //}
 
     glm::vec3 forward = m_Transform->GetForward();
-    glm::vec3 right   = m_Transform->GetRight();
+    glm::vec3 right = m_Transform->GetRight();
     glm::vec3 worldUp = glm::vec3(0.0f, 1.0f, 0.0f);
 
     float speed = m_MoveSpeed;

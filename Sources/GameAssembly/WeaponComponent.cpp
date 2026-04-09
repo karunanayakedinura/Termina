@@ -9,9 +9,8 @@ void GameComponent::WeaponComponent::Start(){
 }
 
 void GameComponent::WeaponComponent::Update(float deltaTime) {
-    if (Time >= Timer && m_Ammo > 0) {
+    if (m_Ammo > 0 && Time >= Timer) {
         m_CanShoot = true;
-        m_Ammo -= 1;
     }
     else {
         Time += deltaTime;
@@ -20,8 +19,10 @@ void GameComponent::WeaponComponent::Update(float deltaTime) {
 
 void GameComponent::WeaponComponent::MunitionSpawner(){
     if (m_CanShoot){
+        TN_INFO("Shoot");
         Termina::Actor* bullet = Instantiate(m_Bullet);
         bullet->GetComponent<Termina::Transform>().SetPosition(this->m_Transform->GetPosition());
+        m_Ammo -= 1;
         m_CanShoot = false;
         Time = 0.f;
     }

@@ -9,6 +9,7 @@
 #include "EnnemySpawner.hpp"
 #include "WeaponComponent.hpp"
 #include "ProjectileComponent.hpp"
+#include "GunPos.hpp"
 
 COMPONENT_MODULE_BEGIN()
     REGISTER_COMPONENT(FlyCamComponent, "Fly Cam Component")
@@ -20,4 +21,5 @@ COMPONENT_MODULE_BEGIN()
     REGISTER_COMPONENT(GameComponent::WeaponComponent, "Weapon Component")
     REGISTER_COMPONENT(GameComponent::ProjectileComponent, "Projectile Component")
     REGISTER_COMPONENT(GameComponent::WeaponSpawner, "Weapon Spawner")
+    REGISTER_COMPONENT(GunPos, "WeaponLoc")
 COMPONENT_MODULE_END()
