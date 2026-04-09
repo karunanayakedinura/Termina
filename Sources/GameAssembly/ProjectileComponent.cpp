@@ -5,9 +5,6 @@
 void GameComponent::ProjectileComponent::Start() {}
 
 void GameComponent::ProjectileComponent::Stop() {
-	m_Enemy = nullptr;
-	m_MeleeEnemy = nullptr;
-	m_RangedEnemy = nullptr;
 
 	Destroy(m_Owner);
 }
@@ -25,6 +22,6 @@ void GameComponent::ProjectileComponent::Update(float deltaTime) {
 
 void GameComponent::ProjectileComponent::OnTriggerEnter(Termina::Actor* other) {
 	if (other->HasComponent<MeleeEnnemyComponent>() || other->HasComponent<RangedEnnemyComponent>() || other->HasComponent<EnnemyComponent>()) {
-		other->GetComponent<MeleeEnnemyComponent>().TakeDamage(20);
+		other->GetComponent<MeleeEnnemyComponent>().TakeDamage(damage);
 	}
 }

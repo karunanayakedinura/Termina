@@ -1,0 +1,51 @@
+{
+    "actors": [
+        {
+            "active": true,
+            "components": [
+                {
+                    "active": true,
+                    "data": {
+                        "position": [
+                            -0.2248520851135254,
+                            1.0483675003051758,
+                            -10.564080238342285
+                        ],
+                        "rotation": [
+                            1.0,
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "type": "Transform"
+                },
+                {
+                    "active": true,
+                    "data": {
+                        "material_overrides": {
+                            "0": "Assets\\Models\\Spawner\\Spawner_mat0.mat",
+                            "1": "Assets\\Models\\Spawner\\Spawner_mat1.mat"
+                        },
+                        "model": "Assets\\Models\\Spawner\\Spawner.gltf"
+                    },
+                    "type": "Mesh Component"
+                },
+                {
+                    "active": true,
+                    "data": {},
+                    "type": "Ennemy Spawner"
+                }
+            ],
+            "id": "17178866929836768969",
+            "name": "Spawner",
+            "parentId": null
+        }
+    ],
+    "version": 1
+}

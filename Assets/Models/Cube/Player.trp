@@ -1,0 +1,165 @@
+{
+    "actors": [
+        {
+            "active": true,
+            "components": [
+                {
+                    "active": true,
+                    "data": {
+                        "position": [
+                            0.725649356842041,
+                            1.0225355625152588,
+                            2.380793571472168
+                        ],
+                        "rotation": [
+                            -0.0061502521857619286,
+                            -1.4825626837300376e-10,
+                            0.9999811053276062,
+                            -2.4116632246773406e-08
+                        ],
+                        "scale": [
+                            60.094810485839844,
+                            60.00001525878906,
+                            60.094810485839844
+                        ]
+                    },
+                    "type": "Transform"
+                },
+                {
+                    "active": true,
+                    "data": {
+                        "material_overrides": {
+                            "0": "Assets\\Models\\Chara\\player_mat0.mat"
+                        },
+                        "model": "Assets\\Models\\Chara\\player.glb"
+                    },
+                    "type": "Mesh Component"
+                },
+                {
+                    "active": true,
+                    "data": {
+                        "allow_sleep": true,
+                        "angular_damping": 0.05000000074505806,
+                        "freeze_pos": [
+                            false,
+                            false,
+                            false
+                        ],
+                        "freeze_rot": [
+                            true,
+                            false,
+                            true
+                        ],
+                        "gravity_factor": 1.0,
+                        "is_sensor": false,
+                        "linear_damping": 0.05000000074505806,
+                        "mass": 1.0,
+                        "type": 1
+                    },
+                    "type": "Rigidbody"
+                },
+                {
+                    "active": true,
+                    "data": {
+                        "atkC": 30.0,
+                        "atkD": 15.0,
+                        "canRespawn": false,
+                        "hasWeapon": false,
+                        "health": 100.0,
+                        "maxHealth": 100.0,
+                        "range": 1.401298464324817e-45,
+                        "shield": 0.0,
+                        "speed": 1.0,
+                        "weapon": 0,
+                        "weaponInUse": false
+                    },
+                    "type": "Player Component"
+                },
+                {
+                    "active": true,
+                    "data": {
+                        "acceleration": 20.0,
+                        "fastMultiplier": 4.0,
+                        "moveSpeed": 5.0,
+                        "pitch": 0.0,
+                        "sensitivity": 0.15000000596046448,
+                        "velocity": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "wasRotating": false,
+                        "yaw": 0.0
+                    },
+                    "type": "Fly Cam Component"
+                },
+                {
+                    "active": true,
+                    "data": {
+                        "half_extents": [
+                            0.014999999664723873,
+                            0.014999999664723873,
+                            0.009999999776482582
+                        ],
+                        "offset": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "rot_off": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ]
+                    },
+                    "type": "Box Collider"
+                }
+            ],
+            "id": "14993538221993051444",
+            "name": "Player",
+            "parentId": null
+        },
+        {
+            "active": true,
+            "components": [
+                {
+                    "active": true,
+                    "data": {
+                        "position": [
+                            0.011608000844717026,
+                            -0.016403505578637123,
+                            0.03970448300242424
+                        ],
+                        "rotation": [
+                            2.4078596894128168e-08,
+                            -0.9999811053276062,
+                            -1.4895880362519875e-10,
+                            -0.0061502521857619286
+                        ],
+                        "scale": [
+                            7.580781936645508,
+                            7.604719161987305,
+                            0.00027690333081409335
+                        ]
+                    },
+                    "type": "Transform"
+                },
+                {
+                    "active": true,
+                    "data": {
+                        "far": 1000.0,
+                        "fov": 75.0,
+                        "near": 0.009999999776482582,
+                        "primary": true
+                    },
+                    "type": "Camera Component"
+                }
+            ],
+            "id": "667253289402660609",
+            "name": "Camera",
+            "parentId": "14993538221993051444"
+        }
+    ],
+    "version": 1
+}

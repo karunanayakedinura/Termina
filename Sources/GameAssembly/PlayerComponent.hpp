@@ -37,7 +37,7 @@ namespace GameComponent {
     private:
         float m_MaxHealth = 100.f;
         float m_Health = 100.f;
-        float m_Speed = 1.f;
+        float m_Speed = 3.f;
         float m_Shield;
         float m_Range;
         float m_AtkC = 30.f;

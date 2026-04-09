@@ -1,0 +1,40 @@
+{
+    "actors": [
+        {
+            "active": true,
+            "components": [
+                {
+                    "active": true,
+                    "data": {
+                        "position": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "rotation": [
+                            1.0,
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "type": "Transform"
+                },
+                {
+                    "active": true,
+                    "data": {},
+                    "type": "Win Screen"
+                }
+            ],
+            "id": "2273200721183950143",
+            "name": "WinScreen",
+            "parentId": null
+        }
+    ],
+    "version": 1
+}

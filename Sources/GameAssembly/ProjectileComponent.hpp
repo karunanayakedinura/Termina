@@ -17,9 +17,6 @@ namespace GameComponent {
 
     private:
         float m_Speed = 10.f;
-
-        EnnemyComponent* m_Enemy;
-        MeleeEnnemyComponent* m_MeleeEnemy;
-        RangedEnnemyComponent* m_RangedEnemy;
+        int damage = 20;
     };
 }

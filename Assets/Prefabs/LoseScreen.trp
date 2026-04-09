@@ -1,0 +1,40 @@
+{
+    "actors": [
+        {
+            "active": true,
+            "components": [
+                {
+                    "active": true,
+                    "data": {
+                        "position": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "rotation": [
+                            1.0,
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "type": "Transform"
+                },
+                {
+                    "active": true,
+                    "data": {},
+                    "type": "Lose Screen"
+                }
+            ],
+            "id": "3647233919312569652",
+            "name": "LoseScreen",
+            "parentId": null
+        }
+    ],
+    "version": 1
+}
