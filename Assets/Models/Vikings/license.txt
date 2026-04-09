@@ -1,0 +1,11 @@
+Model Information:
+* title:	viking
+* source:	https://sketchfab.com/3d-models/viking-573c7159424e48deab89214416798fbc
+* author:	vitaliy-savenko (https://sketchfab.com/vitaliy-savenko)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "viking" (https://sketchfab.com/3d-models/viking-573c7159424e48deab89214416798fbc) by vitaliy-savenko (https://sketchfab.com/vitaliy-savenko) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

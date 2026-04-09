@@ -1,6 +1,7 @@
 #include "PlayerComponent.hpp"
 #include "GameManagerComponent.hpp"
-#include "EnnemyComponent.hpp"
+#include "MeleeEnnemyComponent.hpp"
+#include "RangedEnnemyComponent.hpp"
 #include <Termina/Core/Logger.hpp>
 #include <Termina/World/World.hpp>
 #include <glm/glm.hpp>
@@ -34,25 +35,23 @@ void PlayerComponent::Update(float deltaTime)
     }
 }
 
-void PlayerComponent::OnCollisionEnter(Termina::Actor* other)
+void PlayerComponent::OnTriggerEnter(Termina::Actor* other)
 {
     TN_INFO("Player OnCollisionEnter with {}", other ? other->GetName().c_str() : "null");
 
     if (!other)
         return;
 
-    // Si on touche un ennemi
-    if (other->GetName() == "Enemy" || other->GetName() == "MeleeEnemy" || other->GetName() == "RangedEnemy")
+    if (Input::IsMouseButtonPressed(Termina::MouseButton::Left))
     {
-        health -= 10.0f;
-        TN_INFO("Player took 10 damage, HP = %f", health);
-
-        if (health <= 0.0f && !isDead)
+        if (other->HasComponent<MeleeEnnemyComponent>())
         {
-            isDead = true;
-            TN_INFO("Player died!");
-            if (GameManagerComponent::Instance)
-                GameManagerComponent::Instance->TriggerLose();
+            other->GetComponent<MeleeEnnemyComponent>().TakeDamage(10);
+        }
+
+        if (other->HasComponent<RangedEnnemyComponent>())
+        {
+            other->GetComponent<RangedEnnemyComponent>().TakeDamage(10);
         }
     }
 }

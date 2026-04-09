@@ -10,7 +10,7 @@ public:
 
     void Start()  override;
     void Update(float deltaTime) override;
-    void OnCollisionEnter(Termina::Actor* other) override;
+    void OnTriggerEnter(Termina::Actor* other) override;
 
 
     void SetHealth(float value) { health = value; }
