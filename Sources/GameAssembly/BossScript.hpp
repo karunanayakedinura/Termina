@@ -104,7 +104,7 @@ private:
         None,
         MeleeBasic,
         Jump,
-        DashCombo,
+        BackAttack,
         Ranged
     };
 
@@ -118,19 +118,23 @@ private:
     glm::vec3 m_JumpTargetPos = glm::vec3(0.0f);
     float m_JumpStartY = 0.0f;
 
-    // -------- Dash Combo --------
-    enum class ComboState
+    // -------- Back Attack --------
+    enum class BackAttack
     {
         Positioning,
         Dash,
-        Check,
+        Attack,
         Recovery
     };
 
-    ComboState m_ComboState = ComboState::Positioning;
+    BackAttack m_BackAttackState = BackAttack::Positioning;
 
-    int m_ComboStep = 0;
-    float m_ComboTimer = 0.0f;
+    glm::vec3 m_OrbitStartDir = glm::vec3(0.0f);
+    float m_OrbitRadius = 0.0f;
+    float m_OrbitAngle = 0.0f;
 
-    glm::vec3 m_DashDir = glm::vec3(0.0f);
+    float m_OrbitDuration = 0.35f;
+    float m_RotationSign = 1.0f;
+    float m_BackAttackLockedY = 0.0f;
+    float m_BackAttackTimer = 0.0f;
 };

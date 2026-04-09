@@ -169,31 +169,46 @@ void BossScript::Update(float deltaTime)
         case AttackType::Jump:
         {
             glm::vec3 pos = m_Transform->GetPosition();
-
             float t = m_AttackLocalTimer;
 
-            if (t < 0.2f)
+            // --- 1. WIND-UP (SINK + PAUSE) ---
+            if (t < 0.25f)
             {
+                float jt = t / 0.25f;
+
                 pos = m_JumpStartPos;
-                pos.y = m_JumpStartY - 0.3f;
+
+                float sink = glm::mix(0.0f, -0.5f, jt);
+                pos.y = m_JumpStartY + sink;
             }
-            else if (t < 0.6f)
+
+            // --- 2. JUMP ARC ---
+            else if (t < 0.75f)
             {
-                float jt = (t - 0.2f) / 0.4f;
+                float jt = (t - 0.25f) / 0.5f;
                 jt = glm::clamp(jt, 0.0f, 1.0f);
 
-                glm::vec3 flat = glm::mix(m_JumpStartPos, m_JumpTargetPos, jt);
+                glm::vec3 currentTarget = m_PlayerRef->GetComponent<Termina::Transform>().GetPosition();
+                currentTarget.y = m_JumpStartY;
 
-                float height = 4.0f;
+                glm::vec3 flat = glm::mix(m_JumpStartPos, currentTarget, jt);
+
+                float height = 5.0f;
                 flat.y = m_JumpStartY + height * (4.0f * jt * (1.0f - jt));
 
                 pos = flat;
             }
-            else if (t < 0.8f)
+
+            // --- 3. IMPACT / LANDING ---
+            else if (t < 0.95f)
             {
                 pos = m_JumpTargetPos;
-                pos.y -= 20.0f * (t - 0.6f);
+
+                float fallT = (t - 0.75f) / 0.2f;
+                pos.y = glm::mix(m_JumpStartY + 1.0f, m_JumpStartY, fallT);
             }
+
+            // --- 4. END ---
             else
             {
                 pos = m_JumpTargetPos;
@@ -207,80 +222,124 @@ void BossScript::Update(float deltaTime)
             break;
         }
 
-        case AttackType::DashCombo:
+        case AttackType::BackAttack:
         {
-            glm::vec3 pos = m_Transform->GetPosition();
-
-            switch (m_ComboState)
+            switch (m_BackAttackState)
             {
-            case ComboState::Positioning:
+            case BackAttack::Positioning:
             {
-                glm::vec3 target = m_PlayerRef->GetComponent<Termina::Transform>().GetPosition();
-                glm::vec3 dir = target - pos;
-                dir.y = 0.0f;
+                glm::vec3 playerPos = m_PlayerRef->GetComponent<Termina::Transform>().GetPosition();
+                glm::vec3 pos = m_Transform->GetPosition();
 
-                float dist = glm::length(dir);
+                pos.y = m_BackAttackLockedY;
+                playerPos.y = m_BackAttackLockedY;
 
-                if (dist > m_MeleeAttackRange * 1.5f)
+                glm::vec3 toBoss = pos - playerPos;
+                toBoss.y = 0.0f;
+
+                float dist = glm::length(toBoss);
+
+                if (dist > m_MeleeAttackRange * 1.2f)
                 {
-                    pos += glm::normalize(dir) * m_Speed * deltaTime;
+                    glm::vec3 dir = glm::normalize(playerPos - pos);
+                    dir.y = 0.0f;
+
+                    pos += dir * m_Speed * deltaTime;
                 }
                 else
                 {
-                    glm::vec3 side = glm::cross(dir, glm::vec3(0, 1, 0));
-                    if (rand() % 2) side = -side;
+                    m_OrbitRadius = dist;
+                    m_OrbitStartDir = glm::normalize(toBoss);
 
-                    m_DashDir = glm::normalize(side);
+                    m_OrbitAngle = 0.0f;
+                    m_RotationSign = (rand() % 2) ? 1.0f : -1.0f;
 
-                    m_ComboState = ComboState::Dash;
-                    m_ComboTimer = 0.25f;
+                    m_BackAttackState = BackAttack::Dash;
+                }
+
+                pos.y = m_BackAttackLockedY;
+
+                m_Transform->SetPosition(pos);
+                break;
+            }
+
+            case BackAttack::Dash:
+            {
+                glm::vec3 playerPos = m_PlayerRef->GetComponent<Termina::Transform>().GetPosition();
+
+                playerPos.y = m_BackAttackLockedY;
+
+                float angle = m_OrbitAngle * m_RotationSign;
+
+                float cosA = cos(angle);
+                float sinA = sin(angle);
+
+                glm::vec3 dir;
+                dir.x = m_OrbitStartDir.x * cosA - m_OrbitStartDir.z * sinA;
+                dir.z = m_OrbitStartDir.x * sinA + m_OrbitStartDir.z * cosA;
+                dir.y = 0.0f;
+
+                dir = glm::normalize(dir);
+
+                float orbitRadius = m_OrbitRadius + 2.5f;
+
+                glm::vec3 pos = playerPos + dir * orbitRadius;
+
+                pos.y = m_BackAttackLockedY;
+
+                glm::vec3 look = playerPos - pos;
+                look.y = 0.0f;
+
+                if (glm::length(look) > 0.001f)
+                {
+                    look = glm::normalize(look);
+                    float a = atan2(look.x, look.z);
+
+                    m_Transform->SetRotation(
+                        glm::angleAxis(a, glm::vec3(0, 1, 0))
+                    );
+                }
+
+                m_Transform->SetPosition(pos);
+
+                float speedMultiplier = 1.4f;
+                m_OrbitAngle += (glm::pi<float>() / m_OrbitDuration) * speedMultiplier * deltaTime;
+
+                if (m_OrbitAngle >= glm::pi<float>())
+                {
+                    m_BackAttackState = BackAttack::Attack;
+                    m_BackAttackTimer = 0.2f;
+                }
+
+                break;
+            }
+
+            case BackAttack::Attack:
+            {
+                m_BackAttackTimer -= deltaTime;
+                if (m_BackAttackTimer <= 0.0f)
+                {
+                    m_BackAttackState = BackAttack::Recovery;
+                    m_BackAttackTimer = 0.3f;
                 }
                 break;
             }
 
-            case ComboState::Dash:
-                pos += m_DashDir * 10.0f * deltaTime;
-
-                m_ComboTimer -= deltaTime;
-                if (m_ComboTimer <= 0.0f)
-                    m_ComboState = ComboState::Check;
-                break;
-
-            case ComboState::Check:
-                m_ComboStep++;
-
-                if (m_ComboStep >= 3)
-                {
-                    m_ComboState = ComboState::Recovery;
-                    m_ComboTimer = 0.5f;
-                }
-                else
-                {
-                    m_DashDir = -m_DashDir;
-                    m_ComboState = ComboState::Dash;
-                    m_ComboTimer = 0.35f;
-                }
-                break;
-
-            case ComboState::Recovery:
-                m_ComboTimer -= deltaTime;
-
-                if (m_ComboTimer <= 0.0f)
+            case BackAttack::Recovery:
+            {
+                m_BackAttackTimer -= deltaTime;
+                if (m_BackAttackTimer <= 0.0f)
                 {
                     m_IsAttacking = false;
                     m_CurrentAttack = AttackType::None;
-                    m_ComboState = ComboState::Positioning;
-                    m_ComboStep = 0;
+                    m_BackAttackState = BackAttack::Positioning;
                 }
                 break;
             }
-
-            m_Transform->SetPosition(pos);
-            break;
+            }
         }
-        }
-
         return;
+        }
     }
 
     // -------- TIMER --------
@@ -300,7 +359,7 @@ void BossScript::Update(float deltaTime)
     if (m_CurrentPhase == Phase::Phase1 && hpPercent <= 0.5f)
         EnterPhase(Phase::Phase2);
 
-    if (m_CurrentPhase == Phase::Phase2 && hpPercent <= 0.1f)
+    if (m_CurrentPhase == Phase::Phase2 && hpPercent <= 0.25f)
     {
         EnterPhase(Phase::Phase3);
         m_MaxHealth = 125.0f;
@@ -327,32 +386,32 @@ void BossScript::Update(float deltaTime)
 
         float meleeW = 0.0f;
         float jumpW = 0.0f;
-        float comboW = 0.0f;
+        float backW = 0.0f;
 
         // -------- PHASE WEIGHTS --------
         if (m_CurrentPhase == Phase::Phase1)
         {
-            meleeW = 40.0f;
-            jumpW = 30.0f;
-            comboW = 30.0f;
+            meleeW = 100.0f;
+            jumpW = 0.0f;
+            backW = 0.0f;
         }
         else if (m_CurrentPhase == Phase::Phase2)
         {
-            meleeW = 40.0f;
-            jumpW = 30.0f;
-            comboW = 30.0f;
+            meleeW = 80.0f;
+            jumpW = 0.0f;
+            backW = 20.0f;
         }
         else if (m_CurrentPhase == Phase::Phase3)
         {
-            meleeW = 40.0f;
-            jumpW = 30.0f;
-            comboW = 30.0f;
+            meleeW = 30.0f;
+            jumpW = 40.f;
+            backW = 30.0f;
         }
         else // Phase 4
         {
-            meleeW = 40.0f;
-            jumpW = 30.0f;
-            comboW = 30.0f;
+            meleeW = 30.0f;
+            jumpW = 40.f;
+            backW = 30.0f;
         }
 
         if (r < meleeW)
@@ -360,11 +419,16 @@ void BossScript::Update(float deltaTime)
         else if (r < meleeW + jumpW)
             m_NextAttack = AttackType::Jump;
         else
-            m_NextAttack = AttackType::DashCombo;
+            m_NextAttack = AttackType::BackAttack;
     }
 
     // -------- MOVE --------
     float targetDist = 0.0f;
+
+    float phaseSpeedMultiplier = 1.0f;
+
+    if (m_CurrentPhase == Phase::Phase4)
+        phaseSpeedMultiplier = 2.0f;
 
     if (m_NextAttack != AttackType::None)
     {
@@ -378,11 +442,12 @@ void BossScript::Update(float deltaTime)
             targetDist = m_PrepareRange + 0.5f;
             break;
 
-        case AttackType::DashCombo:
+        case AttackType::BackAttack:
             targetDist = m_PrepareRange + 0.8f;
             break;
         }
     }
+
     else
     {
         switch (m_CurrentPhase)
@@ -409,10 +474,9 @@ void BossScript::Update(float deltaTime)
         glm::vec3 moveDir = glm::normalize(dir);
 
         float error = dist - targetDist;
-
         float deadZone = 0.1f * targetDist;
 
-        float speed = m_Speed;
+        float speed = m_Speed * phaseSpeedMultiplier;
 
         if (fabs(error) > deadZone)
         {
@@ -426,6 +490,8 @@ void BossScript::Update(float deltaTime)
             pos += moveDir * error * 2.0f * deltaTime;
         }
     }
+
+    m_Transform->SetPosition(pos);
 
     // -------- ATTACK TRIGGER --------
     if (!m_IsAttacking && m_NextAttack != AttackType::None)
@@ -443,7 +509,7 @@ void BossScript::Update(float deltaTime)
                 dist <= m_RangedAttackRange;
             break;
 
-        case AttackType::DashCombo:
+        case AttackType::BackAttack:
             ready = dist >= m_PrepareRange &&
                 dist <= m_RangedAttackRange * 1.3f;
             break;
@@ -463,20 +529,20 @@ void BossScript::Update(float deltaTime)
             {
                 glm::vec3 playerPos = m_PlayerRef->GetComponent<Termina::Transform>().GetPosition();
 
-                glm::vec3 dir = playerPos - pos;
-                dir.y = 0.0f;
+                m_JumpStartPos = pos;
 
-                if (glm::length(dir) > 0.001f)
-                    dir = glm::normalize(dir);
+                playerPos.y = pos.y;
 
-                m_JumpTargetPos = playerPos + dir * 0.5f;
+                m_JumpTargetPos = playerPos;
 
                 m_JumpStartY = pos.y;
+
+                m_AttackLocalTimer = 0.0f;
             }
-            else if (m_CurrentAttack == AttackType::DashCombo)
+            else if (m_CurrentAttack == AttackType::BackAttack)
             {
-                m_ComboState = ComboState::Positioning;
-                m_ComboStep = 0;
+                m_BackAttackState = BackAttack::Positioning;
+                m_BackAttackLockedY = m_Transform->GetPosition().y;
             }
 
             m_AttackTimer = 2.0f;
@@ -485,7 +551,7 @@ void BossScript::Update(float deltaTime)
     }
 
     // -------- ROTATION --------
-    if (distSq > 0.0001f)
+    if (distSq > 0.0001f && !m_IsAttacking)
     {
         glm::vec3 lookDir = -glm::normalize(dir);
         float angle = atan2(lookDir.x, lookDir.z);
@@ -604,8 +670,3 @@ void BossScript::TakeDamage(float amount)
 
     TN_INFO("Boss took damage: %.1f (HP: %.1f)", amount, m_Health);
 }
-
-// Le player ne bouge toujours pas
-// Il se tp avant de jump sans raison
-// Il ne fait pas de preparation bien visible du jump pour prevoir
-// Le dash c'est n'imp
