@@ -1,6 +1,5 @@
 #include "RangedEnnemyComponent.hpp"
 #include <Termina/Core/Logger.hpp>
-#include <ImGui/imgui.h>
 #include <glm/glm.hpp>
 
 void RangedEnnemyComponent::Attack(float deltaTime)
@@ -15,50 +14,28 @@ void RangedEnnemyComponent::Attack(float deltaTime)
     dir.y = 0.0f;
 
     float dist = glm::length(dir);
+    dir = glm::normalize(dir);
 
-    if (dist > 0.01f)
-        dir = glm::normalize(dir);
-
-    // --- LOGIQUE DE DISTANCE ---
-    if (dist < m_MinDistance)
+    // ---- LOGIQUE DE DISTANCE ----
+    if (dist <= m_MinDistance)
     {
-   
         pos -= dir * m_Speed * deltaTime;
         m_Transform->SetPosition(pos);
     }
-    else if (dist > m_MaxDistance)
+    else if (dist >= m_MaxDistance)
     {
-    
         pos += dir * m_Speed * deltaTime;
         m_Transform->SetPosition(pos);
     }
     else
     {
-      
-        m_Timer -= deltaTime;
+        m_Timer += deltaTime;
 
-        if (m_Timer <= 0.0f)
+        if (m_Timer >= m_ShootCooldown)
         {
-            m_Timer = m_ShootCooldown;
-
-            TN_INFO("Ranged enemy shoots projectile! Damage = %d", m_Damage);
-
-            // TODO : spawn projectile
+            m_Timer = 0.0f;
+            TN_INFO("Ranged enemy shoots player!");
+            // TODO: Player->TakeDamage(m_Damage);
         }
     }
-}
-
-void RangedEnnemyComponent::Inspect()
-{
-    // Inspect de la classe de base
-    EnnemyComponent::Inspect();
-
-    // Paramètres specifiques au ranged
-    ImGui::Separator();
-    ImGui::Text("Ranged Settings");
-
-    ImGui::DragFloat("Min Distance", &m_MinDistance, 0.1f, 0.0f, 50.0f);
-    ImGui::DragFloat("Max Distance", &m_MaxDistance, 0.1f, 0.0f, 50.0f);
-
-    ImGui::DragFloat("Shoot Cooldown", &m_ShootCooldown, 0.1f, 0.1f, 10.0f);
 }

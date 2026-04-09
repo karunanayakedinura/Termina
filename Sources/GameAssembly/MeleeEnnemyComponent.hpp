@@ -1,12 +1,19 @@
 #pragma once
-#include "EnnemyComponent.hpp"
+#include <Termina/Scripting/API/ScriptingAPI.hpp>
 
-class MeleeEnnemyComponent : public EnnemyComponent
+using namespace TerminaScript;
+
+class MeleeEnnemyComponent : public ScriptableComponent
 {
 public:
     MeleeEnnemyComponent() = default;
-    MeleeEnnemyComponent(Termina::Actor* owner) : EnnemyComponent(owner) {}
+    MeleeEnnemyComponent(Termina::Actor* owner)
+        : ScriptableComponent(owner) {
+    }
 
-protected:
-    void Attack(float deltaTime) override;
+    void Attack(float deltaTime);
+
+private:
+    Termina::Actor* m_Player = nullptr;
+    float m_Damage = 10.0f;
 };

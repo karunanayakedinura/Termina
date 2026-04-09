@@ -12,12 +12,9 @@ public:
 
     void TakeDamage(int amount);
 
-    // Collision
-    void OnCollisionEnter(Termina::Actor* other) override;
-
     int GetHealth() const { return m_Health; }
 
-private:
+protected:
     int m_Health = 50;
     int m_Damage = 10;
 };

@@ -24,30 +24,6 @@ void PlayerComponent::Update(float deltaTime)
         TN_INFO("HP = %f", health);
     }
 
-    // === TIR AVEC CLIC GAUCHE ===
-    if (Input::IsMouseButtonPressed(Termina::MouseButton::Left))
-    {
-        auto* world = m_Owner->GetParentWorld();
-        if (!world) return;
-        OnColl
-        glm::vec3 playerPos = m_Transform->GetPosition();
-        glm::vec3 forward = m_Transform->GetForward();
-
-        for (auto& actorPtr : world->GetActors())
-        {
-            Termina::Actor* actor = actorPtr.get();
-            if (actor->HasComponent<EnnemyComponent>())
-            {
-                auto& enemy = actor->GetComponent<EnnemyComponent>();
-                if (enemy.IsHitByRay(playerPos, forward))
-                {
-                    enemy.TakeDamage(10); // dégâts du clic gauche
-                    TN_INFO("Enemy hit by player!");
-                }
-            }
-        }
-    }
-
     // === MORT DU JOUEUR ===
     if (!isDead && health <= 0.0f)
     {

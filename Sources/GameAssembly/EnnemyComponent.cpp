@@ -28,18 +28,3 @@ void EnnemyComponent::TakeDamage(int amount)
     }
 }
 
-// === Gestion collision joueur ===
-void EnnemyComponent::OnCollisionEnter(Termina::Actor* other)
-{
-    if (!other->HasComponent<PlayerComponent>())
-        return;
-
-    auto& player = other->GetComponent<PlayerComponent>();
-
-    // Si le joueur clique gauche pendant la collision
-    if (Input::IsMouseButtonPressed(Termina::MouseButton::Left))
-    {
-        TakeDamage(10);
-        TN_INFO("Enemy damaged by player collision!");
-    }
-}
