@@ -6,7 +6,7 @@
 
 void BossScript::Start()
 {
-    m_PlayerRef = m_Owner->GetParentWorld()->GetActorByName("PlayerTest");
+    m_PlayerRef = m_Owner->GetParentWorld()->GetActorByName("Player");
     m_IntroParticles = m_Owner->GetParentWorld()->GetActorByName("ParticuleBossIntro");
 
     m_AttackSwitchTimer = m_AttackSwitchCooldown;

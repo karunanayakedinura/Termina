@@ -15,5 +15,5 @@ public:
     void OnRender(float dt) override;
 
 private:
-    std::string m_WorldToLoad = "Assets/Worlds/GameWorld.trw";
+    std::string m_WorldToLoad = "Assets/Worlds/FinalMap";
 };

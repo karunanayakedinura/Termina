@@ -21,8 +21,6 @@ namespace GameComponent {
         void Move(float speed, float deltaTime);
         void AtkDist();
         void AtkCorps(Termina::Actor& other);
-        void OnTriggerEnter(Termina::Actor* other) override;
-
         void Inspect() override;
         void Serialize(nlohmann::json& out) const override;
         void Deserialize(const nlohmann::json& in) override;
