@@ -13,8 +13,8 @@ void GunPos::Update(float dt) {
 	if (m_Owner->GetComponent<Termina::Transform>().GetPosition() != m_Player->GetComponent<Termina::Transform>().GetPosition())
 		m_Owner->GetComponent<Termina::Transform>().SetPosition(glm::vec3(
 			  m_Player->GetComponent<Termina::Transform>().GetPosition().x
-			, m_Player->GetComponent<Termina::Transform>().GetPosition().y +5
-			, m_Player->GetComponent<Termina::Transform>().GetPosition().z +10));
+			, m_Player->GetComponent<Termina::Transform>().GetPosition().y +2
+			, m_Player->GetComponent<Termina::Transform>().GetPosition().z +1));
 
 }
 

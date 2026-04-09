@@ -29,10 +29,9 @@ namespace GameComponent {
         // bool CanRespawn();
 
         //////// GETTER & SETTER //////// 
-        float SetHealth(float newVal) { return m_Health -= newVal; };
-        void SetHealth(float value) { health = value; }
-		void SetDead(bool value) { isDead = value; }
-		float GetHealth() const { return health; }
+        void SetHealth(float value) { m_Health = value; }
+		void SetDead(bool value) { m_IsDead = value; }
+		float GetHealth() const { return m_Health; }
 		void TakeDamage(float value);
 
     private:
@@ -49,6 +48,7 @@ namespace GameComponent {
         bool m_HasWeapon = false;
         bool m_WeaponInUse = false;
         bool m_CanRespawn = false;
+        bool m_IsDead = false;
 
         Termina::Actor* m_Weapon = nullptr;
         Termina::Actor* m_Enemy = nullptr;

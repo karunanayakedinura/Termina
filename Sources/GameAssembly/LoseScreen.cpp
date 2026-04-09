@@ -38,7 +38,7 @@ void LoseScreen::OnRender(float dt)
             auto* player = ws->GetCurrentWorld()->GetActorByName("Player");
             if (player)
             {
-                auto& pc = player->GetComponent<PlayerComponent>();
+                auto& pc = player->GetComponent<GameComponent::PlayerComponent>();
                 pc.SetHealth(100.0f);
                 pc.SetDead(false);
             }

@@ -8,7 +8,7 @@
                     "data": {
                         "position": [
                             0.0,
-                            1.7751073837280273,
+                            1.8755778074264526,
                             -1.0948835611343384
                         ],
                         "rotation": [
@@ -39,9 +39,28 @@
                     "active": true,
                     "data": {},
                     "type": "Projectile Component"
+                },
+                {
+                    "active": true,
+                    "data": {
+                        "half_height": 0.0010000000474974513,
+                        "offset": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "radius": 0.03999999910593033,
+                        "rot_off": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ]
+                    },
+                    "type": "Capsule Collider"
                 }
             ],
-            "id": "16961347157529274329",
+            "id": "11923751604063939178",
             "name": "BulletPrefab",
             "parentId": null
         }

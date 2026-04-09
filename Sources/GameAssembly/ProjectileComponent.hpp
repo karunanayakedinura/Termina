@@ -1,5 +1,8 @@
 #pragma once
 #include <Termina/Scripting/API/ScriptingAPI.hpp>
+#include "MeleeEnnemyComponent.hpp"
+#include "EnnemyComponent.hpp"
+#include "RangedEnnemyComponent.hpp"
 
 namespace GameComponent {
     class ProjectileComponent : public TerminaScript::ScriptableComponent {
@@ -14,5 +17,9 @@ namespace GameComponent {
 
     private:
         float m_Speed = 10.f;
+
+        EnnemyComponent* m_Enemy;
+        MeleeEnnemyComponent* m_MeleeEnemy;
+        RangedEnnemyComponent* m_RangedEnemy;
     };
 }

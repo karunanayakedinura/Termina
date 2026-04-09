@@ -1,21 +1,20 @@
 #include "PlayerComponent.hpp"
 #include "GameManagerComponent.hpp"
 #include "EnnemyComponent.hpp"
+#include "MeleeEnnemyComponent.hpp"
+#include "RangedEnnemyComponent.hpp"
 #include <Termina/Core/Logger.hpp>
 #include <Termina/World/World.hpp>
 #include <glm/glm.hpp>
 #include <ImGui/imgui.h>
 
-void GameComponent::PlayerComponent::Start(){
+void GameComponent::PlayerComponent::Start() {
     auto* world = m_Owner->GetParentWorld();
     Termina::Actor* gun = world->GetActorByName("Gun");
     m_Weapon = gun;
-}
 
-void PlayerComponent::Start()
-{
-    health = 100.0f;
-    isDead = false;
+    m_Health = 100.0f;
+    m_IsDead = false;
 }
 
 void GameComponent::PlayerComponent::Stop()
@@ -27,9 +26,10 @@ void GameComponent::PlayerComponent::Stop()
 void GameComponent::PlayerComponent::Update(float deltaTime){
     Move(m_Speed, deltaTime);
 
-    if (Input::IsMouseButtonPressed(Termina::MouseButton::Right)) {
+    /*if (Input::IsMouseButtonPressed(Termina::MouseButton::Right)) {
         AtkCorps(*m_Enemy);
-    }
+    }*/
+
     if (Input::IsMouseButtonPressed(Termina::MouseButton::Left)) {
         AtkDist();
     }
@@ -45,14 +45,14 @@ void GameComponent::PlayerComponent::Update(float deltaTime){
     // === PERTE DE VIE AVEC O ===
     if (Input::IsKeyPressed(Termina::Key::O))
     {
-        health -= 10.0f;
-        TN_INFO("HP = %f", health);
+        m_Health -= 10.0f;
+        TN_INFO("HP = %f", m_Health);
     }
 
     // === MORT DU JOUEUR ===
-    if (!isDead && health <= 0.0f)
+    if (!m_IsDead && m_Health <= 0.0f)
     {
-        isDead = true;
+        m_IsDead = true;
         TN_INFO("Player died!");
         if (GameManagerComponent::Instance)
             GameManagerComponent::Instance->TriggerLose();
@@ -117,6 +117,20 @@ void GameComponent::PlayerComponent::OnTriggerEnter(Termina::Actor* other) {
 }
 
 
+void GameComponent::PlayerComponent::TakeDamage(float value)
+{
+    m_Health -= value;
+    TN_INFO("Player took %f damage, HP = %f", value, m_Health);
+
+    if (!m_IsDead && m_Health <= 0.0f)
+    {
+        m_IsDead = true;
+        TN_INFO("Player died!");
+        if (GameManagerComponent::Instance)
+            GameManagerComponent::Instance->TriggerLose();
+    }
+}
+
 void GameComponent::PlayerComponent::Inspect()
 {
     ImGui::DragFloat("Speed", &m_Speed, 0.5f);
@@ -153,16 +167,3 @@ void GameComponent::PlayerComponent::Deserialize(const nlohmann::json& in)
     if (in.contains("hasWeapon")) m_HasWeapon = in["hasWeapon"];
 }
 
-void PlayerComponent::TakeDamage(float value)
-{
-    health -= value;
-    TN_INFO("Player took %f damage, HP = %f", value, health);
-
-    if (!isDead && health <= 0.0f)
-    {
-        isDead = true;
-        TN_INFO("Player died!");
-        if (GameManagerComponent::Instance)
-            GameManagerComponent::Instance->TriggerLose();
-    }
-}
